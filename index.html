@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El Caballero y la Princesa</title>
+<meta name="description" content="Un cuento de caballeros y princesas.">
+<meta name="theme-color" content="#151a42">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Dancing+Script:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#4a3526;--parch:rgba(255,250,240,.94);--gold:#e9b949;--rose:#e58fb0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#151a42}
+body{color:var(--ink);font-family:'Nunito',system-ui,-apple-system,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+#bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:20;background:linear-gradient(90deg,#f2c14e,#e58fb0);box-shadow:0 0 8px rgba(242,193,78,.6)}
+
+/* Escenas: cada una es alta y su escenario queda fijo mientras se lee */
+.scene{position:relative;height:calc(var(--h,240)*1vh);height:calc(var(--h,240)*1svh)}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+svg.art{position:absolute;inset:0;width:100%;height:100%;display:block}
+svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
+
+/* Tarjeta de texto tipo pergamino */
+.card{position:absolute;left:0;right:0;margin:0 auto;top:calc(14px + env(safe-area-inset-top));width:min(680px,calc(100% - 32px));background:var(--parch);border:2px solid #ecd9ae;border-radius:22px;padding:14px 22px 16px;text-align:center;box-shadow:0 10px 30px rgba(30,15,50,.18);z-index:2}
+.card::before{content:"";position:absolute;inset:5px;border:1px dashed rgba(176,122,42,.35);border-radius:17px;pointer-events:none}
+.chap{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(11px,.6vw + 8px,14px);letter-spacing:.06em;color:#b07a2a;margin-bottom:6px}
+.card p{font-size:clamp(15.5px,.9vw + 11px,20px);line-height:1.45;font-weight:600}
+.card p+p{margin-top:6px}
+.ps{display:grid}.ps p{grid-area:1/1;margin:0!important}
+.card .fin{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(28px,2vw + 18px,40px);color:#b0405a;margin-top:4px}
+@media (max-height:520px) and (orientation:landscape){
+  .card{left:12px;right:auto;margin:0;width:min(42%,400px);padding:10px 14px}
+  .card p{font-size:14px}
+}
+
+/* Texto dentro de las ilustraciones */
+.bt{font-family:'Nunito',sans-serif;font-weight:800;font-size:20px;fill:#4a3526}
+.lbl{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:17px;fill:#6b3f16}
+.hw{font-family:'Dancing Script',cursive;font-weight:700;font-size:30px;fill:#ffe9b8}
+.whisper{font-family:'Nunito',sans-serif;font-style:italic;font-weight:700;font-size:20px;fill:#cfc2ff}
+
+/* Portada */
+.cover-title{position:absolute;left:0;right:0;top:calc(7vh + env(safe-area-inset-top));text-align:center;padding:0 16px;color:#fff8e6;z-index:2}
+.once{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(24px,2.4vw + 10px,36px);color:#ffd9a0}
+.cover-title h1{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(32px,4.2vw + 12px,70px);line-height:1.08;margin:6px 0 10px;text-shadow:0 4px 24px rgba(255,200,140,.35),0 2px 0 rgba(0,0,0,.25)}
+.sub{font-size:clamp(15px,1vw + 10px,19px);opacity:.9;font-weight:700;letter-spacing:.04em}
+.hint{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));text-align:center;color:#fff3d6;font-weight:800;font-size:15px;letter-spacing:.05em;z-index:2}
+.hint span{display:block;font-size:26px;line-height:1;animation:nudge 2s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* Pregunta */
+.question{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px 16px}
+.qcard{position:relative;z-index:2;max-width:620px;width:100%;text-align:center;background:var(--parch);border:2px solid #ecd9ae;border-radius:26px;padding:28px 22px 26px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.qcard h2{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,1.6vw + 12px,30px);line-height:1.3;color:#5b3419;margin:8px 0 24px}
+.choices{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.choice{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:22px;min-width:130px;padding:14px 30px;border-radius:999px;border:3px solid var(--gold);cursor:pointer;transition:transform .25s,box-shadow .25s;box-shadow:0 6px 0 #c99a2e}
+.choice:hover{transform:translateY(-3px)}
+.choice:active{transform:translateY(3px);box-shadow:0 2px 0 #c99a2e}
+.choice:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.yes{background:linear-gradient(#f0a3c1,#e07ea5);color:#fff}
+.no{background:#fffaf0;color:#5b3419}
+.choice.picked{outline:3px solid #fff;outline-offset:4px}
+.branch{display:none}.branch.show{display:block}
+
+/* Final */
+.finale{position:absolute;left:0;right:0;top:calc(9vh + env(safe-area-inset-top));text-align:center;padding:0 18px;color:#fff;z-index:2}
+.finale h2{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,3.4vw + 12px,58px);line-height:1.2;text-shadow:0 3px 18px rgba(150,40,90,.45)}
+.cont{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(32px,2.5vw + 18px,56px);color:#fff4d6;margin-top:14px;text-shadow:0 2px 12px rgba(120,30,70,.35)}
+.again{display:inline-block;margin-top:16px;font:800 15px 'Nunito',sans-serif;color:#5b3419;background:#fffaf0;border:2px solid var(--gold);border-radius:999px;padding:10px 20px;cursor:pointer}
+
+/* Movimientos suaves y constantes */
+.bob{animation:bob 4.2s ease-in-out infinite}
+.bob2{animation:bob 3.6s ease-in-out .6s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.drift{animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(18px)}}
+.tw{animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.25}}
+.glow{animation:glow 2.6s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
+.fall{animation:fall 9s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes fall{from{transform:translate(0,-60px) rotate(0)}to{transform:translate(70px,980px) rotate(300deg)}}
+.rain{animation:rain .45s linear infinite}
+@keyframes rain{from{transform:translateY(-90px)}to{transform:translateY(0)}}
+.flicker{animation:flicker .18s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:100% 20%}
+@keyframes flicker{from{transform:scale(1,1)}to{transform:scale(1.03,.93)}}
+.spin{animation:spin 80s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.float{animation:float 7s ease-in infinite}
+@keyframes float{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-240px);opacity:0}}
+.float2{animation:float2 9s ease-in infinite}
+@keyframes float2{0%{transform:translateY(0);opacity:0}12%{opacity:1}100%{transform:translateY(-620px);opacity:0}}
+.flut{animation:flut 6s ease-in-out infinite alternate}
+@keyframes flut{0%{transform:translate(0,0)}33%{transform:translate(18px,-14px)}66%{transform:translate(-8px,-24px)}100%{transform:translate(12px,6px)}}
+.shimmer{stroke-dasharray:10 8;animation:shim 1.6s linear infinite}
+@keyframes shim{to{stroke-dashoffset:-36}}
+.sweat{animation:sweat 1.8s ease-in infinite}
+@keyframes sweat{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(18px);opacity:0}}
+.pulse{animation:pulse 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){
+  .bob,.bob2,.drift,.tw,.glow,.fall,.rain,.flicker,.spin,.float,.float2,.flut,.shimmer,.sweat,.pulse,.hint span{animation:none!important}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<!-- ============ PERSONAJES Y OBJETOS REUTILIZABLES ============ -->
+<svg class="defs" aria-hidden="true" focusable="false">
+<defs>
+  <linearGradient id="g-day" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#8fd0ff"/><stop offset="1" stop-color="#fff3dc"/></linearGradient>
+  <linearGradient id="g-sunset" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#a77fcf"/><stop offset=".55" stop-color="#ff9f8a"/><stop offset="1" stop-color="#ffd7a0"/></linearGradient>
+  <linearGradient id="g-night" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#121640"/><stop offset="1" stop-color="#4a3f82"/></linearGradient>
+  <linearGradient id="g-storm" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#474d66"/><stop offset="1" stop-color="#9aa0b4"/></linearGradient>
+  <linearGradient id="g-dawn" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#8fb3ea"/><stop offset=".55" stop-color="#ffc3b4"/><stop offset="1" stop-color="#ffe8c2"/></linearGradient>
+  <linearGradient id="g-dusk" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#2e2458"/><stop offset="1" stop-color="#b77a9e"/></linearGradient>
+  <linearGradient id="g-fire" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#3d1224"/><stop offset=".55" stop-color="#b53a2f"/><stop offset="1" stop-color="#f59a4a"/></linearGradient>
+  <linearGradient id="g-gold" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#f6b26b"/><stop offset=".6" stop-color="#ffd89a"/><stop offset="1" stop-color="#fff1cf"/></linearGradient>
+  <linearGradient id="g-forest" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#10202b"/><stop offset="1" stop-color="#2f4d4c"/></linearGradient>
+  <linearGradient id="g-theater" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#241029"/><stop offset="1" stop-color="#53243e"/></linearGradient>
+  <linearGradient id="g-pink" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="650"><stop offset="0" stop-color="#f28db8"/><stop offset=".55" stop-color="#ffc0a8"/><stop offset="1" stop-color="#ffe9c4"/></linearGradient>
+  <radialGradient id="g-glow"><stop offset="0" stop-color="#fff5c0" stop-opacity=".95"/><stop offset="1" stop-color="#fff5c0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="g-glowp"><stop offset="0" stop-color="#ffd1e3" stop-opacity=".95"/><stop offset="1" stop-color="#ffd1e3" stop-opacity="0"/></radialGradient>
+  <linearGradient id="g-flame" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fff3b0"/><stop offset=".35" stop-color="#ffc04a"/><stop offset=".8" stop-color="#ff6a3d"/><stop offset="1" stop-color="#ff4a3d" stop-opacity=".15"/></linearGradient>
+  <pattern id="p-rain" width="36" height="90" patternUnits="userSpaceOnUse"><path d="M12 4 l-5 20 M30 50 l-5 20" stroke="#e3ebff" stroke-width="2" stroke-linecap="round" opacity=".6"/></pattern>
+  <pattern id="p-check" width="28" height="28" patternUnits="userSpaceOnUse"><rect width="28" height="28" fill="#fff6ee"/><rect width="14" height="14" fill="#e45b67"/><rect x="14" y="14" width="14" height="14" fill="#e45b67"/></pattern>
+
+  <!-- formas básicas (su color viene de quien las usa) -->
+  <path id="heart" d="M0,-5 C-4,-13 -16,-12 -14,-3 C-12,4 -2,8 0,12 C2,8 12,4 14,-3 C16,-12 4,-13 0,-5 Z"/>
+  <path id="star" d="M0,-9 L2.2,-2.2 L9,0 L2.2,2.2 L0,9 L-2.2,2.2 L-9,0 L-2.2,-2.2Z"/>
+  <g id="cloud"><ellipse cx="0" cy="0" rx="60" ry="22"/><circle cx="-24" cy="-12" r="24"/><circle cx="14" cy="-20" r="30"/><circle cx="40" cy="-4" r="18"/></g>
+  <g id="bush"><circle cx="-24" cy="-16" r="22"/><circle cx="0" cy="-26" r="28"/><circle cx="26" cy="-16" r="22"/></g>
+  <g id="pine"><rect x="-7" y="-30" width="14" height="30" fill="#4a3226"/><path d="M0,-170 L-45,-90 L-25,-90 L-60,-30 L60,-30 L25,-90 L45,-90Z"/></g>
+  <g id="tree"><rect x="-10" y="-90" width="20" height="90" rx="6" fill="#8a5a3b"/><circle cx="0" cy="-120" r="50" fill="#6fbf73"/><circle cx="-34" cy="-96" r="32" fill="#5fae66"/><circle cx="34" cy="-98" r="34" fill="#7fcb7f"/><circle cx="-10" cy="-150" r="30" fill="#86d08a"/></g>
+  <g id="flower"><path d="M0,0 V-26" stroke="#4f9a57" stroke-width="3"/><g transform="translate(0 -30)"><circle cx="0" cy="-7" r="6"/><circle cx="7" cy="-2" r="6"/><circle cx="4" cy="6" r="6"/><circle cx="-4" cy="6" r="6"/><circle cx="-7" cy="-2" r="6"/><circle r="4" fill="#ffd65a"/></g></g>
+  <g id="butterfly"><g><ellipse cx="-8" cy="-5" rx="9" ry="11"/><ellipse cx="-6" cy="8" rx="6" ry="7"/><ellipse cx="8" cy="-5" rx="9" ry="11"/><ellipse cx="6" cy="8" rx="6" ry="7"/><animateTransform attributeName="transform" type="scale" values="1 1;.25 1;1 1" dur=".5s" repeatCount="indefinite"/></g><rect x="-1.5" y="-10" width="3" height="22" rx="1.5" fill="#5a3a28"/></g>
+  <path id="rays" d="M0,0L597,-63L597,63Z M0,0L548,244L485,353Z M0,0L353,485L244,548Z M0,0L63,597L-63,597Z M0,0L-244,548L-353,485Z M0,0L-485,353L-548,244Z M0,0L-597,63L-597,-63Z M0,0L-548,-244L-485,-353Z M0,0L-353,-485L-244,-548Z M0,0L-63,-597L63,-597Z M0,0L244,-548L353,-485Z M0,0L485,-353L548,-244Z"/>
+
+  <!-- cielo estrellado que titila -->
+  <g id="stars">
+    <use href="#star" transform="translate(80 90) scale(.8)"><animate attributeName="opacity" values="1;.25;1" dur="3.1s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(170 210) scale(.55)"><animate attributeName="opacity" values="1;.25;1" dur="2.6s" begin="-1s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(260 60) scale(1)"><animate attributeName="opacity" values="1;.25;1" dur="3.6s" begin="-2s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(340 170) scale(.7)"><animate attributeName="opacity" values="1;.25;1" dur="2.9s" begin="-.5s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(430 80) scale(.5)"><animate attributeName="opacity" values="1;.25;1" dur="3.3s" begin="-1.7s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(530 30) scale(.9)"><animate attributeName="opacity" values="1;.25;1" dur="2.7s" begin="-.9s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(610 160) scale(.55)"><animate attributeName="opacity" values="1;.25;1" dur="3.8s" begin="-2.4s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(690 70) scale(.8)"><animate attributeName="opacity" values="1;.25;1" dur="3s" begin="-1.3s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(900 100) scale(.7)"><animate attributeName="opacity" values="1;.25;1" dur="2.5s" begin="-.3s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(955 240) scale(.5)"><animate attributeName="opacity" values="1;.25;1" dur="3.4s" begin="-2.8s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(50 310) scale(.6)"><animate attributeName="opacity" values="1;.25;1" dur="2.8s" begin="-1.1s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(130 430) scale(.45)"><animate attributeName="opacity" values="1;.25;1" dur="3.2s" begin="-.7s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(890 340) scale(.6)"><animate attributeName="opacity" values="1;.25;1" dur="3.5s" begin="-1.9s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(470 260) scale(.45)"><animate attributeName="opacity" values="1;.25;1" dur="2.6s" begin="-1.5s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(760 250) scale(.45)"><animate attributeName="opacity" values="1;.25;1" dur="3.1s" begin="-.2s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(30 150) scale(.7)"><animate attributeName="opacity" values="1;.25;1" dur="2.9s" begin="-2.2s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(980 40) scale(.6)"><animate attributeName="opacity" values="1;.25;1" dur="3.7s" begin="-1.4s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(820 180) scale(.4)"><animate attributeName="opacity" values="1;.25;1" dur="2.4s" begin="-.6s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(110 -60) scale(.7)"><animate attributeName="opacity" values="1;.25;1" dur="3s" begin="-1s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(300 -120) scale(.6)"><animate attributeName="opacity" values="1;.25;1" dur="3.3s" begin="-2s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(520 -50) scale(.8)"><animate attributeName="opacity" values="1;.25;1" dur="2.7s" begin="-.4s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(700 -110) scale(.6)"><animate attributeName="opacity" values="1;.25;1" dur="3.6s" begin="-1.6s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(880 -60) scale(.7)"><animate attributeName="opacity" values="1;.25;1" dur="2.9s" begin="-2.6s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(240 -30) scale(.45)"><animate attributeName="opacity" values="1;.25;1" dur="3.1s" begin="-.8s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(640 -20) scale(.5)"><animate attributeName="opacity" values="1;.25;1" dur="3.4s" begin="-1.2s" repeatCount="indefinite"/></use>
+    <use href="#star" transform="translate(410 -100) scale(.5)"><animate attributeName="opacity" values="1;.25;1" dur="2.8s" begin="-2.1s" repeatCount="indefinite"/></use>
+  </g>
+
+  <!-- castillo -->
+  <g id="castle">
+    <rect x="-112" y="-236" width="48" height="236" fill="#e6d8ee"/>
+    <path d="M-120,-236 L-88,-306 L-56,-236Z" fill="#9b86cf"/>
+    <rect x="64" y="-236" width="48" height="236" fill="#e6d8ee"/>
+    <path d="M56,-236 L88,-306 L120,-236Z" fill="#9b86cf"/>
+    <path d="M-95,-190 v-16 a7,7 0 0 1 14,0 v16z M81,-190 v-16 a7,7 0 0 1 14,0 v16z" fill="#ffe7a3"/>
+    <rect x="-140" y="-140" width="280" height="140" fill="#f3e8f5"/>
+    <path d="M-140,-140 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20 v-14 h20 v14 h20Z" fill="#f3e8f5"/>
+    <rect x="-48" y="-256" width="96" height="256" fill="#faf2fb"/>
+    <path d="M-58,-256 L0,-346 L58,-256Z" fill="#e88bb0"/>
+    <path d="M0,-346 V-384" stroke="#8a5a3b" stroke-width="3"/>
+    <path d="M0,-384 L30,-376 L0,-366Z" fill="#f2c14e"/>
+    <path d="M-12,-190 v-22 a12,12 0 0 1 24,0 v22z" fill="#ffe7a3"/>
+    <rect x="-164" y="-190" width="46" height="190" fill="#efe2f3"/>
+    <path d="M-172,-190 L-141,-252 L-110,-190Z" fill="#e88bb0"/>
+    <rect x="118" y="-190" width="46" height="190" fill="#efe2f3"/>
+    <path d="M110,-190 L141,-252 L172,-190Z" fill="#e88bb0"/>
+    <path d="M-148,-120 v-16 a7,7 0 0 1 14,0 v16z M134,-120 v-16 a7,7 0 0 1 14,0 v16z" fill="#ffe7a3"/>
+    <circle cx="-90" cy="-90" r="9" fill="#ffe7a3"/><circle cx="90" cy="-90" r="9" fill="#ffe7a3"/>
+    <path d="M-28,0 V-52 a28,28 0 0 1 56,0 V0Z" fill="#9a6644"/>
+    <path d="M0,0 V-80" stroke="#7a4e33" stroke-width="2"/>
+  </g>
+
+  <!-- torre -->
+  <g id="tower">
+    <rect x="-62" y="-400" width="124" height="400" fill="#dcd2e6"/>
+    <path d="M-62,-300 h124 M-62,-200 h124 M-62,-100 h124" stroke="#c7bcd4" stroke-width="3"/>
+    <path d="M-80,-400 L0,-530 L80,-400Z" fill="#9b86cf"/>
+    <path d="M0,-530 V-566" stroke="#8a5a3b" stroke-width="3"/>
+    <path d="M0,-566 L28,-558 L0,-548Z" fill="#e88bb0"/>
+    <path d="M-18,-300 v-34 a18,18 0 0 1 36,0 v34z" fill="#ffe7a3"/>
+    <path d="M-30,0 V-58 a30,30 0 0 1 60,0 V0Z" fill="#9a6644"/>
+  </g>
+
+  <!-- pulsera -->
+  <g id="bracelet">
+    <ellipse rx="13" ry="4.5" fill="none" stroke="#6b4a2e" stroke-width="1.5"/>
+    <circle cx="-12" cy="0" r="3" fill="#e0525e"/><circle cx="-8" cy="3" r="3" fill="#f2c14e"/><circle cx="-3" cy="4.4" r="3" fill="#6fc3df"/>
+    <circle cx="3" cy="4.4" r="3" fill="#fff"/><circle cx="8" cy="3" r="3" fill="#e58fb0"/><circle cx="12" cy="0" r="3" fill="#f2c14e"/>
+  </g>
+
+  <!-- rosa -->
+  <g id="rose">
+    <path d="M0,0 Q5,30 0,60" stroke="#3f8a4a" stroke-width="4" fill="none"/>
+    <path d="M2,30 q14,-8 18,4 q-12,6 -18,-4Z" fill="#5fae66"/>
+    <circle r="11" fill="#d93a55"/>
+    <path d="M-7,-1 q7,-9 14,0 q-7,7 -14,0" fill="#b82a45"/>
+    <circle cx="0" cy="-3" r="4" fill="#b82a45"/>
+  </g>
+
+  <!-- paloma mensajera -->
+  <g id="bird">
+    <path d="M-24,-2 L-44,-12 L-40,0 L-44,12 L-24,4Z" fill="#eef0fa"/>
+    <ellipse cx="0" cy="0" rx="26" ry="13" fill="#fff"/>
+    <circle cx="24" cy="-8" r="10" fill="#fff"/>
+    <path d="M33,-10 L43,-6 L33,-3Z" fill="#f2a541"/>
+    <circle cx="27" cy="-10" r="1.8" fill="#333"/>
+    <path d="M-8,-4 Q-24,-40 8,-38 Q10,-18 6,-4Z" fill="#e6e9f7"><animateTransform attributeName="transform" type="rotate" values="-8 0 -4;38 0 -4;-8 0 -4" dur=".8s" repeatCount="indefinite"/></path>
+  </g>
+  <g id="dove"><use href="#bird"/><g transform="translate(36 -2)"><rect x="0" y="-2" width="22" height="15" rx="2" fill="#fffaf0" stroke="#c9a66b" stroke-width="1.5"/><path d="M0,-2 L11,6 L22,-2" fill="none" stroke="#c9a66b" stroke-width="1.5"/><circle cx="11" cy="7" r="2.5" fill="#e0525e"/></g></g>
+
+  <!-- ======= EL CABALLERO: alto, cabello negro, cejas gruesas ======= -->
+  <g id="knight-base">
+    <path d="M-46,-214 Q0,-226 46,-214 L70,-14 Q0,-2 -70,-14Z" fill="#a8323e"/>
+    <rect x="-31" y="-116" width="22" height="106" rx="9" fill="#97a3b3"/>
+    <rect x="9" y="-116" width="22" height="106" rx="9" fill="#97a3b3"/>
+    <ellipse cx="-20" cy="-58" rx="13" ry="8" fill="#c9d2de"/>
+    <ellipse cx="20" cy="-58" rx="13" ry="8" fill="#c9d2de"/>
+    <ellipse cx="-22" cy="-8" rx="18" ry="9" fill="#5a3a28"/>
+    <ellipse cx="22" cy="-8" rx="18" ry="9" fill="#5a3a28"/>
+    <rect x="-47" y="-222" width="94" height="120" rx="28" fill="#c9d2de"/>
+    <path d="M-34,-216 L34,-216 L42,-100 Q0,-90 -42,-100Z" fill="#2f4f8f"/>
+    <path d="M-34,-216 L34,-216" stroke="#e9b949" stroke-width="4"/>
+    <use href="#heart" transform="translate(0 -170) scale(1.1)" fill="#e9b949"/>
+    <rect x="-45" y="-122" width="90" height="12" rx="5" fill="#6b4226"/>
+    <rect x="-8" y="-124" width="16" height="16" rx="3" fill="#e9b949"/>
+    <rect x="-67" y="-210" width="22" height="96" rx="11" fill="#b3bdca"/>
+    <rect x="45" y="-210" width="22" height="96" rx="11" fill="#b3bdca"/>
+    <circle cx="-56" cy="-112" r="12" fill="#f1c6a0"/>
+    <circle cx="56" cy="-112" r="12" fill="#f1c6a0"/>
+    <ellipse cx="-46" cy="-208" rx="22" ry="15" fill="#dfe6ee"/>
+    <ellipse cx="46" cy="-208" rx="22" ry="15" fill="#dfe6ee"/>
+    <rect x="-12" y="-238" width="24" height="22" rx="4" fill="#e7b58f"/>
+    <ellipse cx="-53" cy="-276" rx="9" ry="12" fill="#eab892"/>
+    <ellipse cx="53" cy="-276" rx="9" ry="12" fill="#eab892"/>
+    <circle cx="0" cy="-280" r="54" fill="#f3cda8"/>
+    <path d="M-58,-270 C-66,-330 -30,-350 4,-346 C44,-344 66,-320 58,-268 C55,-292 48,-306 40,-310 C32,-300 14,-304 6,-316 C-4,-302 -24,-302 -34,-312 C-44,-308 -54,-296 -58,-270Z" fill="#1d1a22"/>
+    <path d="M-40,-332 C-20,-344 10,-346 30,-336" stroke="#3a3542" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+    <ellipse cx="-19" cy="-274" rx="6.5" ry="8" fill="#2a1f1c"><animate attributeName="ry" values="8;8;.8;8;8" keyTimes="0;.9;.94;.97;1" dur="5.2s" repeatCount="indefinite"/></ellipse>
+    <ellipse cx="19" cy="-274" rx="6.5" ry="8" fill="#2a1f1c"><animate attributeName="ry" values="8;8;.8;8;8" keyTimes="0;.9;.94;.97;1" dur="5.2s" repeatCount="indefinite"/></ellipse>
+    <g fill="#fff"><circle cx="-17" cy="-277" r="2.3"/><circle cx="21" cy="-277" r="2.3"/><animate attributeName="opacity" values="1;1;0;1;1" keyTimes="0;.9;.94;.97;1" dur="5.2s" repeatCount="indefinite"/></g>
+    <path d="M-3,-258 Q0,-253 3,-258" stroke="#cf9470" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+  <g id="knight-b"><use href="#knight-base"/><use href="#bracelet" transform="translate(56 -125)"/></g>
+  <g id="shield"><path d="M-98,-198 Q-64,-210 -30,-198 Q-28,-130 -64,-96 Q-100,-130 -98,-198Z" fill="#2f4f8f" stroke="#e9b949" stroke-width="5" stroke-linejoin="round"/><use href="#heart" transform="translate(-64 -156) scale(1.2)" fill="#e9b949"/></g>
+  <g id="sword"><g transform="rotate(24 56 -112)"><path d="M52,-120 V-298 L56,-314 L60,-298 V-120Z" fill="#eef3f8" stroke="#9aa6b5" stroke-width="1.5"/><path d="M56,-296 V-124" stroke="#c9d2de" stroke-width="1.5"/><rect x="36" y="-128" width="40" height="8" rx="4" fill="#e9b949"/><rect x="53" y="-120" width="6" height="20" fill="#6b4226"/><circle cx="56" cy="-98" r="5" fill="#e9b949"/></g><circle cx="56" cy="-112" r="12" fill="#f1c6a0"/></g>
+  <g id="knight-armed"><use href="#knight-base"/><use href="#sword"/><use href="#bracelet" transform="translate(56 -125)"/><use href="#shield"/></g>
+
+  <!-- caras del caballero -->
+  <g id="kface-happy"><path d="M-31,-290 Q-20,-297 -8,-291 M8,-291 Q20,-297 31,-290" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".45"><circle cx="-33" cy="-254" r="9"/><circle cx="33" cy="-254" r="9"/></g><path d="M-14,-246 Q0,-233 14,-246" stroke="#7a3b2e" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  <g id="kface-love"><path d="M-31,-290 Q-20,-297 -8,-291 M8,-291 Q20,-297 31,-290" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".7"><circle cx="-33" cy="-254" r="10"/><circle cx="33" cy="-254" r="10"/></g><path d="M-14,-249 Q0,-229 14,-249Z" fill="#8a3b33"/></g>
+  <g id="kface-nervous"><path d="M-31,-293 Q-20,-301 -8,-296 M8,-296 Q20,-301 31,-293" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".65"><circle cx="-33" cy="-254" r="10"/><circle cx="33" cy="-254" r="10"/></g><path d="M-12,-243 q3,-4 6,0 q3,4 6,0 q3,-4 6,0 q3,4 6,0" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <g id="kface-soft"><path d="M-31,-289 Q-20,-295 -8,-294 M8,-294 Q20,-295 31,-289" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".35"><circle cx="-33" cy="-254" r="9"/><circle cx="33" cy="-254" r="9"/></g><path d="M-9,-245 Q0,-239 9,-245" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <g id="kface-sad"><path d="M-31,-287 Q-20,-291 -8,-299 M8,-299 Q20,-291 31,-287" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M-11,-238 Q0,-247 11,-238" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <g id="kface-brave"><path d="M-31,-299 Q-20,-297 -8,-289 M8,-289 Q20,-297 31,-299" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".3"><circle cx="-33" cy="-254" r="9"/><circle cx="33" cy="-254" r="9"/></g><path d="M-11,-244 Q0,-238 11,-244" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+
+  <!-- ======= LA PRINCESA: sonrisa hermosa, cabello castaño, ojos brillantes ======= -->
+  <g id="princess-base">
+    <path d="M-54,-206 C-64,-150 -66,-126 -50,-108 L50,-108 C66,-126 64,-150 54,-206Z" fill="#6e4632"/>
+    <circle cx="0" cy="-204" r="56" fill="#6e4632"/>
+    <path d="M-24,-142 L24,-142 L38,-100 C62,-60 78,-24 82,-4 Q0,8 -82,-4 C-78,-24 -62,-60 -38,-100Z" fill="#f2a7c3"/>
+    <g fill="#f8cadb"><circle cx="-72" cy="-3" r="9"/><circle cx="-54" cy="0" r="9"/><circle cx="-36" cy="2" r="9"/><circle cx="-18" cy="3" r="9"/><circle cx="0" cy="3" r="9"/><circle cx="18" cy="3" r="9"/><circle cx="36" cy="2" r="9"/><circle cx="54" cy="0" r="9"/><circle cx="72" cy="-3" r="9"/></g>
+    <g fill="#fff" opacity=".7"><circle cx="-30" cy="-50" r="3"/><circle cx="20" cy="-70" r="3"/><circle cx="40" cy="-30" r="3"/><circle cx="-8" cy="-30" r="3"/><circle cx="-48" cy="-24" r="2.5"/><circle cx="4" cy="-86" r="2.5"/></g>
+    <path d="M-26,-156 L26,-156 L23,-100 Q0,-94 -23,-100Z" fill="#e4879f"/>
+    <rect x="-24" y="-106" width="48" height="8" rx="4" fill="#f2c14e"/>
+    <rect x="-45" y="-148" width="14" height="54" rx="7" fill="#f6d2b4"/>
+    <rect x="31" y="-148" width="14" height="54" rx="7" fill="#f6d2b4"/>
+    <circle cx="-38" cy="-94" r="8" fill="#f6d2b4"/><circle cx="38" cy="-94" r="8" fill="#f6d2b4"/>
+    <circle cx="-32" cy="-148" r="15" fill="#f8cadb"/><circle cx="32" cy="-148" r="15" fill="#f8cadb"/>
+    <rect x="-8" y="-162" width="16" height="14" fill="#efc3a2"/>
+    <circle cx="0" cy="-200" r="48" fill="#f7d6ba"/>
+    <path d="M-50,-204 C-54,-248 -20,-256 0,-254 C26,-256 56,-244 50,-198 C46,-218 32,-232 20,-236 C10,-226 -14,-224 -28,-234 C-38,-228 -46,-218 -50,-204Z" fill="#6e4632"/>
+    <path d="M-50,-206 C-58,-172 -56,-150 -46,-134 C-44,-160 -42,-184 -38,-204Z M50,-206 C58,-172 56,-150 46,-134 C44,-160 42,-184 38,-204Z" fill="#6e4632"/>
+    <path d="M-30,-244 q14,-8 28,-6" stroke="#8f5f44" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>
+    <path d="M-22,-248 L-17,-264 L-9,-252 L0,-270 L9,-252 L17,-264 L22,-248Z" fill="#f2c14e" stroke="#d9a431" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle cx="0" cy="-258" r="3.5" fill="#6fc3df"/>
+    <ellipse cx="-17" cy="-196" rx="8" ry="10" fill="#3a2418"><animate attributeName="ry" values="10;10;1;10;10" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></ellipse>
+    <ellipse cx="17" cy="-196" rx="8" ry="10" fill="#3a2418"><animate attributeName="ry" values="10;10;1;10;10" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></ellipse>
+    <g fill="#fff"><circle cx="-14" cy="-200" r="3.2"/><circle cx="-20" cy="-191" r="1.6"/><circle cx="20" cy="-200" r="3.2"/><circle cx="14" cy="-191" r="1.6"/><animate attributeName="opacity" values="1;1;0;1;1" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></g>
+    <path d="M-25,-202 l-5,-4 M-25,-197 l-6,-1 M25,-202 l5,-4 M25,-197 l6,-1" stroke="#3a2418" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-2,-181 q2,3 4,0" stroke="#d9a07e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+  <g id="pface-happy"><path d="M-25,-214 Q-17,-220 -9,-215 M9,-215 Q17,-220 25,-214" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".55"><circle cx="-29" cy="-180" r="9"/><circle cx="29" cy="-180" r="9"/></g><path d="M-15,-172 Q0,-148 15,-172Z" fill="#b0405a"/><path d="M-13,-171.5 L13,-171.5 Q12,-166 0,-165.5 Q-12,-166 -13,-171.5Z" fill="#fff"/></g>
+  <g id="pface-soft"><path d="M-25,-214 Q-17,-220 -9,-215 M9,-215 Q17,-220 25,-214" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".45"><circle cx="-29" cy="-180" r="9"/><circle cx="29" cy="-180" r="9"/></g><path d="M-11,-171 Q0,-161 11,-171" stroke="#b0405a" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <g id="pface-sad"><path d="M-25,-211 Q-17,-213 -9,-220 M9,-220 Q17,-213 25,-211" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".3"><circle cx="-29" cy="-180" r="9"/><circle cx="29" cy="-180" r="9"/></g><path d="M-9,-162 Q0,-170 9,-162" stroke="#b0405a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M-25,-186 q-5,8 0,11 q5,-3 0,-11z" fill="#9fd8f7"><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/></path></g>
+
+  <!-- ======= LOS PROBLEMAS: lobos, bestia, sombra y dragón ======= -->
+  <g id="wolf">
+    <path d="M44,-50 Q86,-70 80,-108 Q70,-78 40,-66Z" fill="#3c3a5c"/>
+    <rect x="-34" y="-44" width="13" height="40" rx="6" fill="#3c3a5c"/>
+    <rect x="22" y="-44" width="13" height="40" rx="6" fill="#3c3a5c"/>
+    <ellipse cx="4" cy="-58" rx="50" ry="28" fill="#4d4b70"/>
+    <rect x="-18" y="-44" width="13" height="40" rx="6" fill="#4d4b70"/>
+    <rect x="36" y="-44" width="13" height="40" rx="6" fill="#4d4b70"/>
+    <circle cx="-44" cy="-84" r="26" fill="#4d4b70"/>
+    <path d="M-60,-88 L-90,-76 Q-86,-66 -60,-66Z" fill="#5d5b82"/>
+    <circle cx="-89" cy="-78" r="4.5" fill="#1c1a2e"/>
+    <path d="M-62,-102 L-60,-128 L-44,-106Z M-42,-108 L-32,-132 L-24,-104Z" fill="#3c3a5c"/>
+    <circle cx="-50" cy="-90" r="12" fill="url(#g-glow)" opacity=".7"/>
+    <ellipse cx="-50" cy="-90" rx="6" ry="4" fill="#ffe066"/>
+    <circle cx="-51" cy="-90" r="2" fill="#1c1a2e"/>
+    <path d="M-58,-98 L-42,-95" stroke="#2b2944" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g id="beast">
+    <ellipse cx="-44" cy="-8" rx="28" ry="11" fill="#4f6b3c"/><ellipse cx="44" cy="-8" rx="28" ry="11" fill="#4f6b3c"/>
+    <rect x="-62" y="-64" width="36" height="58" rx="15" fill="#5f7d4a"/><rect x="26" y="-64" width="36" height="58" rx="15" fill="#5f7d4a"/>
+    <path d="M-96,-80 L-132,-196 Q-150,-236 -118,-240 Q-94,-236 -108,-192 L-84,-84Z" fill="#8a5a3b"/>
+    <ellipse cx="-86" cy="-160" rx="12" ry="18" fill="#62804c"/><ellipse cx="86" cy="-160" rx="12" ry="18" fill="#62804c"/>
+    <ellipse cx="0" cy="-124" rx="88" ry="92" fill="#6f8f5a"/>
+    <ellipse cx="0" cy="-98" rx="56" ry="58" fill="#a8c08a"/>
+    <ellipse cx="-86" cy="-112" rx="20" ry="44" transform="rotate(18 -86 -112)" fill="#62804c"/>
+    <ellipse cx="86" cy="-112" rx="20" ry="44" transform="rotate(-18 86 -112)" fill="#62804c"/>
+    <circle cx="-96" cy="-76" r="14" fill="#62804c"/><circle cx="96" cy="-76" r="14" fill="#62804c"/>
+    <path d="M-46,-196 L-62,-240 L-26,-206Z M46,-196 L62,-240 L26,-206Z" fill="#f1e6c8"/>
+    <circle cx="-28" cy="-152" r="15" fill="#fff"/><circle cx="28" cy="-152" r="15" fill="#fff"/>
+    <circle cx="-32" cy="-149" r="6.5" fill="#2a1f1c"/><circle cx="24" cy="-149" r="6.5" fill="#2a1f1c"/>
+    <path d="M-48,-176 L-14,-164 M14,-164 L48,-176" stroke="#3d5230" stroke-width="8" stroke-linecap="round"/>
+    <path d="M-30,-112 Q0,-128 30,-112" stroke="#3d2a20" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M-22,-117 l4,-14 l6,11z M22,-117 l-4,-14 l-6,11z" fill="#fff"/>
+    <g fill="#5f7d4a" opacity=".6"><circle cx="-50" cy="-60" r="6"/><circle cx="52" cy="-140" r="5"/><circle cx="-60" cy="-150" r="4"/></g>
+  </g>
+  <g id="gloom">
+    <path d="M-100,0 C-110,-130 -78,-280 0,-290 C78,-280 110,-130 100,0 C76,-16 56,6 34,-10 C12,8 -12,-10 -34,6 C-56,-12 -78,8 -100,0Z" fill="#221a38"/>
+    <ellipse cx="-30" cy="-200" rx="13" ry="7" fill="#b9a4ff"/><ellipse cx="30" cy="-200" rx="13" ry="7" fill="#b9a4ff"/>
+    <path d="M-26,-150 Q0,-164 26,-150" stroke="#b9a4ff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>
+  </g>
+  <g id="dragon">
+    <path d="M90,-44 C170,-30 230,-80 262,-160 C250,-80 200,-12 90,-14Z" fill="#6f46a0"/>
+    <path d="M254,-166 L284,-186 L270,-146Z" fill="#f2c14e"/>
+    <path d="M50,-190 C70,-300 160,-366 240,-350 C212,-330 222,-300 200,-280 C212,-258 190,-240 170,-230 C160,-212 128,-200 96,-186Z" fill="#553483"/>
+    <ellipse cx="80" cy="-34" rx="36" ry="38" fill="#63409a"/>
+    <path d="M40,-198 l14,-28 l12,26z M80,-186 l16,-26 l10,28z M116,-164 l18,-22 l6,28z M140,-130 l22,-14 l0,26z" fill="#f2c14e"/>
+    <ellipse cx="30" cy="-110" rx="112" ry="92" fill="#7b4fa8"/>
+    <ellipse cx="-6" cy="-94" rx="70" ry="70" fill="#ecd29a"/>
+    <path d="M-62,-122 H50 M-68,-96 H56 M-62,-70 H50" stroke="#d6b474" stroke-width="4" stroke-linecap="round"/>
+    <ellipse cx="-52" cy="-26" rx="32" ry="34" fill="#63409a"/>
+    <ellipse cx="34" cy="-20" rx="30" ry="28" fill="#63409a"/>
+    <path d="M-78,-4 l6,-10 l6,10z M-62,-4 l6,-10 l6,10z M-46,-4 l6,-10 l6,10z M12,-2 l6,-10 l6,10z M28,-2 l6,-10 l6,10z M44,-2 l6,-10 l6,10z" fill="#fff"/>
+    <path d="M-6,-178 C-8,-282 64,-366 146,-376 C124,-352 134,-326 114,-306 C124,-284 104,-264 84,-254 C74,-232 42,-216 14,-200Z" fill="#9468c4"/>
+    <path d="M-2,-186 L140,-370 M10,-196 L112,-306 M24,-204 L84,-254" stroke="#7b4fa8" stroke-width="3" fill="none"/>
+    <path d="M-54,-168 C-70,-214 -86,-244 -96,-266 L-44,-300 C-34,-266 -6,-226 18,-190Z" fill="#7b4fa8"/>
+    <path d="M-52,-172 C-66,-210 -80,-238 -90,-260 L-72,-270 C-62,-244 -46,-212 -34,-182Z" fill="#ecd29a"/>
+    <path d="M-84,-328 L-60,-376 L-62,-322Z M-112,-334 L-104,-382 L-92,-330Z" fill="#f2c14e"/>
+    <ellipse cx="-100" cy="-292" rx="60" ry="44" fill="#7b4fa8"/>
+    <ellipse cx="-152" cy="-278" rx="38" ry="27" fill="#8a60bb"/>
+    <circle cx="-176" cy="-286" r="3.5" fill="#3b2456"/><circle cx="-162" cy="-290" r="3.5" fill="#3b2456"/>
+    <ellipse cx="-104" cy="-306" rx="14" ry="12" fill="#fff"/><circle cx="-110" cy="-304" r="6.5" fill="#2a1f1c"/><circle cx="-108" cy="-307" r="2" fill="#fff"/>
+    <path d="M-126,-324 L-88,-316" stroke="#3b2456" stroke-width="6" stroke-linecap="round"/>
+    <path d="M-186,-266 Q-146,-252 -104,-264" stroke="#3b2456" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M-172,-262 l4,8 l4,-7z M-150,-258 l4,8 l4,-8z" fill="#fff"/>
+  </g>
+</defs>
+</svg>
+
+<main>
+
+<!-- ======================= PORTADA ======================= -->
+<section class="scene" id="inicio" style="--h:170">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-night)"/>
+      <g data-a="y 0 -50 0 1"><use href="#stars" fill="#fff6d6"/></g>
+      <g data-a="y 0 -70 0 1"><circle cx="810" cy="170" r="110" fill="url(#g-glow)" opacity=".55"/><circle cx="810" cy="170" r="44" fill="#fff4cf"/><circle cx="796" cy="158" r="8" fill="#f0e0ae"/><circle cx="824" cy="186" r="6" fill="#f0e0ae"/></g>
+      <g class="drift" opacity=".3"><use href="#cloud" fill="#c9c3ff" transform="translate(230 260) scale(1.1)"/><use href="#cloud" fill="#c9c3ff" transform="translate(700 320) scale(.8)"/></g>
+      <g data-a="y 0 20 0 1"><path d="M-3000,590 C100,560 250,470 420,520 C560,560 700,470 880,510 C1100,560 3000,560 4000,580 V900 H-3000Z" fill="#4a4388"/></g>
+      <g transform="translate(500 605) scale(.78)"><g data-a="y 0 -24 0 1; s 1 1.05 0 1" data-o="50% 100%"><use href="#castle"/></g></g>
+      <g data-a="y 0 30 0 1">
+        <path d="M-3000,650 C100,600 300,610 500,640 C700,665 850,610 4000,640 V3000 H-3000Z" fill="#2d285c"/>
+        <use href="#pine" fill="#232050" transform="translate(140 660) scale(1.2)"/>
+        <use href="#pine" fill="#232050" transform="translate(215 672) scale(.85)"/>
+        <use href="#pine" fill="#232050" transform="translate(860 652) scale(1.3)"/>
+        <use href="#pine" fill="#232050" transform="translate(785 670) scale(.8)"/>
+      </g>
+      <g fill="#ffe98a"><circle class="tw" cx="300" cy="610" r="3"/><circle class="tw" cx="360" cy="580" r="2.5" style="animation-delay:-1s"/><circle class="tw" cx="660" cy="600" r="3" style="animation-delay:-2s"/><circle class="tw" cx="720" cy="570" r="2.5" style="animation-delay:-.5s"/><circle class="tw" cx="560" cy="700" r="3" style="animation-delay:-1.6s"/></g>
+    </svg>
+    <div class="cover-title" data-a="o 1 0 .3 .75; y 0 -50 .25 .8">
+      <div class="once">Érase una vez…</div>
+      <h1>El Caballero<br>y la Princesa</h1>
+      <div class="sub">Un cuento de amor</div>
+    </div>
+    <div class="hint" data-a="o 1 0 0 .12">Desliza para comenzar<span>⌄</span></div>
+  </div>
+</section>
+
+<!-- ======================= I. EL PRIMER ENCUENTRO ======================= -->
+<section class="scene" style="--h:260">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+      <g data-a="y 0 30 0 1"><circle cx="850" cy="150" r="100" fill="url(#g-glow)"/><circle cx="850" cy="150" r="42" fill="#ffe27a"/></g>
+      <g class="drift"><use href="#cloud" fill="#fff" transform="translate(190 170)"/><use href="#cloud" fill="#fff" transform="translate(610 110) scale(.75)"/></g>
+      <g data-a="x 0 -25 0 1"><path d="M-3000,600 C0,580 180,500 400,540 C580,572 760,500 1000,540 C1300,590 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/><use href="#castle" transform="translate(720 560) scale(.34)"/></g>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <g data-a="x 0 -50 0 1"><use href="#tree" transform="translate(150 650) scale(1.15)"/><use href="#tree" transform="translate(880 650) scale(1.25)"/></g>
+      <g transform="translate(620 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <g data-a="o 0 1 .3 .45" fill="#fff7c2"><use href="#star" class="tw" transform="translate(540 380) scale(1.1)"/><use href="#star" class="tw" style="animation-delay:-1s" transform="translate(700 360) scale(.9)"/><use href="#star" class="tw" style="animation-delay:-2s" transform="translate(690 470) scale(.7)"/><use href="#star" class="tw" style="animation-delay:-.6s" transform="translate(548 480) scale(.6)"/></g>
+      <g class="flut"><use href="#butterfly" fill="#f7a8c8" transform="translate(730 480)"/></g>
+      <g transform="translate(390 650)"><g data-a="x -380 0 0 .35; o 0 1 0 .15" data-o="50% 100%"><g class="bob"><use href="#knight-base"/><use href="#kface-love"/></g></g></g>
+      <g data-a="o 0 1 .42 .55">
+        <g class="float"><use href="#heart" fill="#ef6f8e" transform="translate(440 300) scale(1.2)"/></g>
+        <g class="float" style="animation-delay:-2.3s"><use href="#heart" fill="#f59ab0" transform="translate(470 330) scale(.9)"/></g>
+        <g class="float" style="animation-delay:-4.6s"><use href="#heart" fill="#ef6f8e" transform="translate(410 320) scale(.8)"/></g>
+      </g>
+      <use href="#flower" fill="#f39ab6" transform="translate(210 725)"/><use href="#flower" fill="#c7a3f0" transform="translate(262 745) scale(.9)"/><use href="#flower" fill="#fff" transform="translate(330 715)"/>
+      <use href="#flower" fill="#ff9e80" transform="translate(470 740) scale(.9)"/><use href="#flower" fill="#f39ab6" transform="translate(560 720)"/><use href="#flower" fill="#c7a3f0" transform="translate(700 735)"/>
+      <use href="#flower" fill="#fff" transform="translate(765 715) scale(.9)"/><use href="#flower" fill="#ff9e80" transform="translate(810 745)"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo I · El primer encuentro</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Érase una vez, en un reino muy lejano, un joven caballero que vio por primera vez a una hermosa princesa.</p>
+      <p data-a="o 0 1 .45 .6; y 12 0 .45 .6">Desde ese instante, su corazón quedó completamente enamorado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= II. LA EXCUSA ======================= -->
+<section class="scene" style="--h:250">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+      <circle cx="160" cy="120" r="38" fill="#ffe27a"/>
+      <g class="drift"><use href="#cloud" fill="#fff" transform="translate(420 100) scale(.8)"/><use href="#cloud" fill="#fff" transform="translate(830 160)"/></g>
+      <g data-a="x 0 -20 0 1"><path d="M-3000,590 C0,570 220,520 420,545 C620,570 800,510 1000,530 C1300,560 3000,560 4000,580 V760 H-3000Z" fill="#b6e09d"/><use href="#castle" transform="translate(830 590) scale(.55)"/></g>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <g data-a="x 0 -40 0 1"><use href="#bush" fill="#7fc47a" transform="translate(190 660) scale(1.3)"/><use href="#bush" fill="#86cf84" transform="translate(900 665) scale(1.2)"/></g>
+      <g transform="translate(610 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <g transform="translate(420 650)"><g data-a="x -90 0 0 .25" data-o="50% 100%"><g class="bob">
+        <use href="#knight-base"/>
+        <use href="#kface-nervous" data-a="o 1 0 .62 .7"/>
+        <use href="#kface-love" data-a="o 0 1 .62 .7"/>
+        <g data-a="o 0 1 .2 .3; o 1 0 .6 .68"><g class="sweat"><path d="M60,-320 q-6,10 0,14 q6,-4 0,-14z" fill="#9fd8f7"/></g></g>
+      </g></g></g>
+      <g data-a="o 0 1 .22 .32; y 10 0 .22 .32">
+        <g transform="translate(190 232)"><rect width="210" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M150,58 L205,90 L178,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="148" y="52" width="32" height="8" fill="#fff"/><text class="bt" x="105" y="39" text-anchor="middle">Ehh… hola… yo…</text></g>
+      </g>
+      <g data-a="o 0 1 .5 .6; y 10 0 .5 .6">
+        <g transform="translate(650 300)"><rect width="150" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M26,58 L14,96 L52,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="24" y="52" width="30" height="8" fill="#fff"/><text class="bt" x="66" y="39" text-anchor="middle">¡Hola!</text><use href="#heart" fill="#ef6f8e" transform="translate(120 32) scale(.7)"/></g>
+      </g>
+      <use href="#flower" fill="#f39ab6" transform="translate(240 735)"/><use href="#flower" fill="#fff" transform="translate(320 720) scale(.9)"/><use href="#flower" fill="#c7a3f0" transform="translate(520 745)"/><use href="#flower" fill="#ff9e80" transform="translate(700 725)"/><use href="#flower" fill="#f39ab6" transform="translate(780 745) scale(.9)"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo II · La excusa más tonta</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Buscó la excusa más tonta del reino para hablarle.</p>
+      <p data-a="o 0 1 .55 .68; y 12 0 .55 .68">Quizás no fue la mejor excusa… pero al menos logró hablarle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= III. SIEMPRE EN SU MENTE ======================= -->
+<section class="scene" style="--h:270">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-night)"/>
+      <g data-a="y 0 -30 0 1"><use href="#stars" fill="#fff6d6"/></g>
+      <circle cx="240" cy="190" r="90" fill="url(#g-glow)" opacity=".5"/><circle cx="240" cy="190" r="36" fill="#fff4cf"/>
+      <path d="M-3000,600 C100,580 300,560 500,580 C700,600 850,560 4000,590 V900 H-3000Z" fill="#3a3a78"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#2b3160"/>
+      <use href="#pine" fill="#222654" transform="translate(190 655) scale(1.1)"/>
+      <use href="#pine" fill="#222654" transform="translate(880 650) scale(1.2)"/>
+      <g transform="translate(340 650)"><g class="bob"><use href="#knight-base"/><use href="#kface-love"/></g></g>
+      <g fill="#fffaf0">
+        <circle cx="410" cy="300" r="9" data-a="o 0 1 .08 .14"/>
+        <circle cx="446" cy="268" r="13" data-a="o 0 1 .12 .18"/>
+        <circle cx="490" cy="240" r="17" data-a="o 0 1 .16 .22"/>
+      </g>
+      <g data-a="o 0 1 .2 .32; s .85 1 .2 .32">
+        <g fill="#fffaf0"><ellipse cx="640" cy="350" rx="150" ry="95"/><circle cx="530" cy="322" r="58"/><circle cx="600" cy="272" r="66"/><circle cx="690" cy="270" r="62"/><circle cx="760" cy="326" r="55"/><circle cx="735" cy="400" r="50"/><circle cx="555" cy="396" r="52"/></g>
+        <g transform="translate(640 440) scale(.48)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+        <use href="#heart" fill="#ef6f8e" transform="translate(556 300) scale(.7)"/><use href="#heart" fill="#f59ab0" transform="translate(728 296) scale(.6)"/>
+        <use href="#star" fill="#f2c14e" transform="translate(575 380) scale(.8)"/><use href="#star" fill="#f2c14e" transform="translate(712 382) scale(.7)"/>
+      </g>
+      <text class="hw" x="555" y="522" text-anchor="middle" data-a="o 0 1 .38 .46; y 10 0 .38 .46">su sonrisa</text>
+      <text class="hw" x="745" y="515" text-anchor="middle" data-a="o 0 1 .44 .52; y 10 0 .44 .52">sus ojos</text>
+      <text class="hw" x="545" y="578" text-anchor="middle" data-a="o 0 1 .5 .58; y 10 0 .5 .58">sus labios</text>
+      <text class="hw" x="740" y="572" text-anchor="middle" data-a="o 0 1 .56 .64; y 10 0 .56 .64">su risa</text>
+      <text class="hw" x="645" y="615" text-anchor="middle" data-a="o 0 1 .62 .7; y 10 0 .62 .7">su cabello</text>
+      <g fill="#ffe98a"><circle class="tw" cx="260" cy="560" r="3"/><circle class="tw" cx="880" cy="520" r="2.5" style="animation-delay:-1.3s"/><circle class="tw" cx="450" cy="600" r="2.5" style="animation-delay:-.7s"/></g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo III · Siempre en su mente</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">No había minuto ni segundo en que no pensara en ella.</p>
+      <p data-a="o 0 1 .38 .5; y 12 0 .38 .5">Su sonrisa, sus ojos, sus labios, su risa, su cabello… todo en ella era increíble.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= IV. POCO A POCO ======================= -->
+<section class="scene" style="--h:270">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-sunset)" data-a="o 0 1 .3 .9"/>
+      <g data-a="y 0 300 0 1"><circle cx="760" cy="170" r="100" fill="url(#g-glow)"/><circle cx="760" cy="170" r="44" fill="#ffd36a"/></g>
+      <g class="drift"><use href="#cloud" fill="#fff" transform="translate(220 150)" opacity=".9"/><use href="#cloud" fill="#fff" transform="translate(560 90) scale(.7)" opacity=".9"/></g>
+      <g data-a="x 0 -40 0 1"><path d="M-3000,590 C0,560 200,520 380,545 C560,570 700,520 1000,535 C1300,560 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/></g>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <rect x="-3000" y="560" width="7000" height="3000" fill="#e79a6b" data-a="o 0 .22 .3 .9"/>
+      <path d="M330,800 Q440,700 470,650 Q490,610 505,570 L520,570 Q520,620 560,650 Q620,700 700,800Z" fill="#efdcae"/>
+      <g data-a="x 0 -90 0 1"><use href="#tree" transform="translate(140 655) scale(1.2)"/><use href="#tree" transform="translate(900 650) scale(1.1)"/><use href="#bush" fill="#7fc47a" transform="translate(250 670)"/></g>
+      <g transform="translate(400 650)"><g data-a="x -80 0 0 .7" data-o="50% 100%"><g class="bob"><use href="#knight-base"/><use href="#kface-happy"/></g></g></g>
+      <g transform="translate(600 650)"><g data-a="x 80 0 0 .7" data-o="50% 100%"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g></g>
+      <g transform="translate(500 360)"><g data-a="o 0 1 .7 .82; s .4 1 .7 .82"><g class="pulse"><use href="#heart" fill="#ef6f8e" transform="scale(1.6)"/></g></g></g>
+      <g class="flut"><use href="#butterfly" fill="#ffd65a" transform="translate(300 450)"/></g>
+      <use href="#flower" fill="#f39ab6" transform="translate(250 740)"/><use href="#flower" fill="#fff" transform="translate(740 730)"/><use href="#flower" fill="#c7a3f0" transform="translate(820 750)"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo IV · Poco a poco</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Se fueron conociendo poco a poco, entre charlas, miradas y risas.</p>
+      <p data-a="o 0 1 .55 .7; y 12 0 .55 .7">Un tiempo después salieron juntos… y todo empezaba a ir muy bien.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= V. LA GRAN PREGUNTA ======================= -->
+<section class="scene" style="--h:270">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-sunset)"/>
+      <circle cx="500" cy="560" r="170" fill="url(#g-glow)" opacity=".7"/>
+      <circle cx="500" cy="560" r="80" fill="#ffd36a"/>
+      <g class="drift" opacity=".8"><use href="#cloud" fill="#ffd9e2" transform="translate(210 180)"/><use href="#cloud" fill="#ffd9e2" transform="translate(790 130) scale(.8)"/></g>
+      <path d="M-3000,590 C0,570 200,540 380,560 C560,580 700,540 1000,550 C1300,560 3000,570 4000,580 V760 H-3000Z" fill="#d98a8f"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#a8c77f"/>
+      <use href="#tree" transform="translate(130 655) scale(1.2)"/>
+      <use href="#bush" fill="#8cbf6e" transform="translate(880 668) scale(1.3)"/>
+      <g transform="translate(410 650)"><g class="bob"><use href="#knight-base"/><use href="#kface-love"/></g></g>
+      <g transform="translate(470 508)"><g data-a="o 0 1 .06 .14; x 0 30 .1 .3; r 0 18 .1 .3" data-o="50% 100%"><use href="#rose"/></g></g>
+      <g transform="translate(600 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-soft" data-a="o 1 0 .5 .56"/><use href="#pface-happy" data-a="o 0 1 .5 .56"/></g></g>
+      <g data-a="o 0 1 .16 .28; y 10 0 .16 .28">
+        <g transform="translate(192 226)"><rect width="236" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M170,58 L220,94 L198,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="168" y="52" width="32" height="8" fill="#fff"/><text class="bt" x="118" y="39" text-anchor="middle" style="font-size:19px">¿Quieres ser mi novia?</text></g>
+      </g>
+      <g data-a="o 0 1 .5 .58; s .6 1 .5 .58">
+        <g transform="translate(650 318)"><rect width="110" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M26,58 L14,92 L52,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="24" y="52" width="30" height="8" fill="#fff"/><text class="bt" x="55" y="40" text-anchor="middle" style="font-size:26px;fill:#b0405a">¡Sí!</text></g>
+      </g>
+      <g transform="translate(505 420)">
+        <use href="#heart" fill="#ef6f8e" data-a="o 0 1 .52 .6; x 0 -60 .52 .75; y 0 -170 .52 .75; s .3 1.2 .52 .75"/>
+        <use href="#heart" fill="#f59ab0" data-a="o 0 1 .52 .6; x 0 70 .52 .75; y 0 -160 .52 .75; s .3 1.1 .52 .75"/>
+        <use href="#heart" fill="#e0525e" data-a="o 0 1 .54 .62; x 0 0 .54 .78; y 0 -230 .54 .78; s .3 1.4 .54 .78"/>
+        <use href="#heart" fill="#ef6f8e" data-a="o 0 1 .54 .62; x 0 25 .54 .78; y 0 -110 .54 .78; s .3 .9 .54 .78"/>
+        <use href="#heart" fill="#f59ab0" data-a="o 0 1 .56 .64; x 0 -150 .56 .8; y 0 -230 .56 .8; s .3 .9 .56 .8"/>
+        <use href="#heart" fill="#e0525e" data-a="o 0 1 .56 .64; x 0 160 .56 .8; y 0 -220 .56 .8; s .3 .9 .56 .8"/>
+        <use href="#star" fill="#fff7c2" data-a="o 0 1 .58 .66; x 0 -90 .58 .8; y 0 -260 .58 .8"/>
+        <use href="#star" fill="#fff7c2" data-a="o 0 1 .58 .66; x 0 110 .58 .8; y 0 -280 .58 .8"/>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo V · La gran pregunta</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Un atardecer, el caballero reunió todo su valor y le pidió ser su novio…</p>
+      <p data-a="o 0 1 .54 .66; y 12 0 .54 .66">¡Y la princesa aceptó!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VI. JUNTOS ======================= -->
+<section class="scene" style="--h:480">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <!-- 1. paseos -->
+      <g data-a="o 1 0 .17 .23">
+        <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+        <circle cx="820" cy="140" r="40" fill="#ffe27a"/>
+        <g class="drift"><use href="#cloud" fill="#fff" transform="translate(250 150)"/><use href="#cloud" fill="#fff" transform="translate(690 80) scale(.7)"/></g>
+        <path d="M-3000,600 C0,580 180,500 400,540 C580,572 760,500 1000,540 C1300,590 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/>
+        <use href="#castle" transform="translate(250 575) scale(.3)"/>
+        <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+        <path d="M310,800 Q440,700 470,650 Q490,610 505,570 L520,570 Q520,620 560,650 Q620,700 730,800Z" fill="#efdcae"/>
+        <use href="#tree" transform="translate(160 655) scale(1.1)"/><use href="#tree" transform="translate(870 655) scale(1.2)"/>
+        <g class="flut"><use href="#butterfly" fill="#c7a3f0" transform="translate(720 430)"/></g>
+        <use href="#flower" fill="#f39ab6" transform="translate(260 735)"/><use href="#flower" fill="#fff" transform="translate(770 735)"/>
+      </g>
+      <!-- 2. películas y series -->
+      <g data-a="o 0 1 .17 .23; o 1 0 .37 .43">
+        <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-theater)"/>
+        <rect x="380" y="185" width="240" height="125" rx="8" fill="#fff3d6"/>
+        <rect x="360" y="165" width="280" height="165" rx="14" fill="url(#g-glow)" opacity=".5"/>
+        <g fill="#3b2440" opacity=".75"><path d="M420,300 V250 h14 v-10 h10 v10 h14 v-18 l16,-16 l16,16 v18 h14 v-10 h10 v10 h14 v50Z"/><use href="#heart" transform="translate(575 240) scale(.9)"/></g>
+        <rect x="-3000" y="640" width="7000" height="3000" fill="#6b3f2a"/>
+        <path d="M-3000,660 H4000 M-3000,700 H4000 M-3000,745 H4000" stroke="#5a3322" stroke-width="3"/>
+        <path d="M-3000,-3000 H250 C238,200 282,480 228,640 H-3000Z" fill="#b3243e"/>
+        <path d="M4000,-3000 H750 C762,200 718,480 772,640 H4000Z" fill="#b3243e"/>
+        <path d="M200,-200 C196,200 214,440 190,640 M760,-200 C764,200 780,440 800,640" stroke="#8e1b31" stroke-width="6" fill="none"/>
+        <g fill="#ffe7a3"><circle class="tw" cx="200" cy="650" r="5"/><circle class="tw" cx="300" cy="650" r="5" style="animation-delay:-1s"/><circle class="tw" cx="700" cy="650" r="5" style="animation-delay:-2s"/><circle class="tw" cx="800" cy="650" r="5" style="animation-delay:-.5s"/></g>
+      </g>
+      <!-- 3. picnic -->
+      <g data-a="o 0 1 .37 .43; o 1 0 .57 .63">
+        <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+        <circle cx="200" cy="150" r="100" fill="url(#g-glow)"/><circle cx="200" cy="150" r="44" fill="#ffe27a"/>
+        <g class="drift"><use href="#cloud" fill="#fff" transform="translate(700 130)"/></g>
+        <path d="M-3000,590 C0,560 250,530 450,555 C650,580 800,530 1000,545 C1300,570 3000,570 4000,580 V760 H-3000Z" fill="#c3e6a4"/>
+        <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+        <use href="#tree" transform="translate(850 650) scale(1.4)"/>
+        <g class="flut"><use href="#butterfly" fill="#ffb3c7" transform="translate(300 440)"/></g>
+      </g>
+      <!-- 4. juegos -->
+      <g data-a="o 0 1 .57 .63; o 1 0 .77 .83">
+        <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+        <g class="drift"><use href="#cloud" fill="#fff" transform="translate(260 120)"/><use href="#cloud" fill="#fff" transform="translate(560 190) scale(.6)"/></g>
+        <path d="M-3000,600 C0,570 220,530 420,555 C620,580 800,520 1000,540 C1300,570 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/>
+        <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+        <path d="M790,282 Q720,420 628,556" stroke="#fff" stroke-width="1.8" fill="none" opacity=".85"/>
+        <g transform="translate(790 230)"><path d="M0,-40 L28,0 L0,50 L-28,0Z" fill="#6fc3df"/><path d="M0,-40 L28,0 L0,0Z" fill="#f2c14e"/><path d="M0,-40 L-28,0 L0,0Z" fill="#e58fb0"/><path d="M0,50 q-10,20 4,36 q12,16 -2,34" stroke="#e58fb0" stroke-width="3" fill="none"/></g>
+        <use href="#tree" transform="translate(150 655) scale(1.1)"/>
+      </g>
+      <!-- 5. pijamada -->
+      <g data-a="o 0 1 .77 .83">
+        <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-night)"/>
+        <use href="#stars" fill="#fff6d6"/>
+        <circle cx="230" cy="170" r="90" fill="url(#g-glow)" opacity=".5"/><circle cx="230" cy="170" r="36" fill="#fff4cf"/>
+        <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#2b3160"/>
+        <path d="M640,650 L760,470 L880,650Z" fill="#f2a7c3"/><path d="M760,470 L732,650 H788Z" fill="#c9658e"/>
+        <path d="M150,250 Q500,390 850,250" stroke="#ffe7a3" stroke-width="2" fill="none" opacity=".6"/>
+        <g><circle class="tw" cx="220" cy="263" r="5" fill="#ffe7a3"/><circle class="tw" cx="290" cy="272" r="5" fill="#ffb3c7" style="animation-delay:-.6s"/><circle class="tw" cx="360" cy="279" r="5" fill="#b8e1ff" style="animation-delay:-1.2s"/><circle class="tw" cx="430" cy="284" r="5" fill="#ffe7a3" style="animation-delay:-1.8s"/><circle class="tw" cx="500" cy="285" r="5" fill="#ffb3c7" style="animation-delay:-2.4s"/><circle class="tw" cx="570" cy="284" r="5" fill="#b8e1ff" style="animation-delay:-.3s"/><circle class="tw" cx="640" cy="279" r="5" fill="#ffe7a3" style="animation-delay:-.9s"/><circle class="tw" cx="710" cy="272" r="5" fill="#ffb3c7" style="animation-delay:-1.5s"/><circle class="tw" cx="780" cy="263" r="5" fill="#b8e1ff" style="animation-delay:-2.1s"/></g>
+      </g>
+      <!-- los dos, siempre juntos -->
+      <g transform="translate(420 650)"><g class="bob"><use href="#knight-base"/><use href="#kface-happy"/></g></g>
+      <g transform="translate(590 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <!-- objetos al frente -->
+      <g data-a="o 0 1 .17 .23; o 1 0 .37 .43">
+        <path d="M458,502 L494,502 L488,548 L464,548Z" fill="#fff"/><path d="M466,502 L470,548 M478,502 L478,548 M488,502 L484,548" stroke="#e0525e" stroke-width="5"/>
+        <g fill="#fff6d0"><circle cx="462" cy="498" r="7"/><circle cx="474" cy="493" r="8"/><circle cx="487" cy="498" r="7"/><circle cx="480" cy="488" r="6"/></g>
+      </g>
+      <g data-a="o 0 1 .37 .43; o 1 0 .57 .63">
+        <ellipse cx="505" cy="708" rx="210" ry="42" fill="url(#p-check)"/>
+        <g transform="translate(640 700)"><path d="M-30,-4 Q0,-52 30,-4" stroke="#8a5a3b" stroke-width="5" fill="none"/><rect x="-34" y="-8" width="68" height="36" rx="8" fill="#c68a4f"/><path d="M-34,6 H34" stroke="#a36d3a" stroke-width="3"/></g>
+        <circle cx="400" cy="705" r="11" fill="#e0525e"/><circle cx="424" cy="712" r="11" fill="#e0525e"/><path d="M400,694 q3,-6 7,-7" stroke="#4f9a57" stroke-width="2.5" fill="none"/>
+        <path d="M500,712 L540,712 L520,690Z" fill="#ffe0a3" stroke="#e8c27a" stroke-width="2"/>
+      </g>
+      <g data-a="o 0 1 .57 .63; o 1 0 .77 .83">
+        <g transform="translate(290 700)"><circle r="24" fill="#fff"/><path d="M-24,0 A24,24 0 0 1 24,0Z" fill="#e58fb0"/><path d="M-6,-24 A24,24 0 0 1 -6,24" stroke="#6fc3df" stroke-width="5" fill="none"/></g>
+        <g class="float"><text class="hw" x="330" y="330" style="fill:#d9467a">¡jaja!</text></g>
+        <g class="float" style="animation-delay:-3.5s"><text class="hw" x="660" y="390" style="fill:#d9467a">¡jiji!</text></g>
+      </g>
+      <g data-a="o 0 1 .77 .83">
+        <ellipse cx="330" cy="700" rx="46" ry="18" fill="#b8e1ff"/><ellipse cx="690" cy="700" rx="46" ry="18" fill="#ffc9dc"/>
+        <rect x="380" y="690" width="260" height="40" rx="14" fill="#8e7cc3"/><path d="M400,700 h220" stroke="#b3a4e0" stroke-width="3" stroke-dasharray="8 8"/>
+        <circle cx="210" cy="630" r="50" fill="url(#g-glow)" class="glow"/><rect x="198" y="612" width="24" height="36" rx="6" fill="#ffe7a3" stroke="#8a5a3b" stroke-width="3"/><path d="M204,612 Q210,596 216,612" stroke="#8a5a3b" stroke-width="3" fill="none"/>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .05">
+      <div class="chap">Capítulo VI · Juntos</div>
+      <div class="ps">
+        <p data-a="o 0 1 .02 .07; o 1 0 .17 .21">Hacían muchas cosas juntos: salían a pasear por todo el reino…</p>
+        <p data-a="o 0 1 .21 .25; o 1 0 .37 .41">…veían películas y series, acurrucados en el teatro del castillo…</p>
+        <p data-a="o 0 1 .41 .45; o 1 0 .57 .61">…hacían picnics en la pradera…</p>
+        <p data-a="o 0 1 .61 .65; o 1 0 .77 .81">…jugaban y se reían sin parar…</p>
+        <p data-a="o 0 1 .81 .85">…y hacían pijamadas bajo las estrellas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VII. LA PULSERA ======================= -->
+<section class="scene" style="--h:290">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-gold)"/>
+      <circle cx="820" cy="220" r="120" fill="url(#g-glow)"/><circle cx="820" cy="220" r="48" fill="#ffe08a"/>
+      <g class="drift" opacity=".9"><use href="#cloud" fill="#fff4de" transform="translate(220 160)"/></g>
+      <path d="M-3000,590 C0,570 200,530 400,550 C600,570 800,520 1000,540 C1300,560 3000,570 4000,580 V760 H-3000Z" fill="#c9d98f"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#a9cf86"/>
+      <use href="#tree" transform="translate(150 655) scale(1.25)"/>
+      <use href="#bush" fill="#8cc67a" transform="translate(880 665) scale(1.2)"/>
+      <g transform="translate(400 650)"><g class="bob"><use href="#knight-base"/><use href="#kface-happy" data-a="o 1 0 .56 .62"/><use href="#kface-love" data-a="o 0 1 .56 .62"/></g></g>
+      <g transform="translate(600 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <g transform="translate(456 525)"><g data-a="o 0 1 .1 .2; x 104 0 .32 .6; y 22 0 .32 .6; s 2.6 1 .32 .6">
+        <circle r="22" fill="url(#g-glow)" class="glow"/>
+        <use href="#bracelet"/>
+      </g></g>
+      <g data-a="o 0 1 .6 .7" fill="#fff7c2"><use href="#star" class="tw" transform="translate(478 500) scale(.7)"/><use href="#star" class="tw" style="animation-delay:-1s" transform="translate(436 548) scale(.6)"/><use href="#star" class="tw" style="animation-delay:-2s" transform="translate(482 552) scale(.5)"/></g>
+      <g data-a="o 0 1 .66 .76; y 10 0 .66 .76">
+        <g transform="translate(196 204)"><rect width="256" height="86" rx="28" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M170,82 L204,112 L198,82" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="168" y="76" width="32" height="8" fill="#fff"/><text class="bt" x="128" y="36" text-anchor="middle" style="font-size:19px">Nunca me la quitaré.</text><text class="bt" x="128" y="64" text-anchor="middle" style="fill:#b0405a;font-size:19px">Y siempre lucharé por ti.</text></g>
+      </g>
+      <use href="#flower" fill="#f39ab6" transform="translate(250 740)"/><use href="#flower" fill="#fff" transform="translate(330 725) scale(.9)"/><use href="#flower" fill="#c7a3f0" transform="translate(690 740)"/><use href="#flower" fill="#ff9e80" transform="translate(770 725)"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo VII · La pulsera</div>
+      <p data-a="o 0 1 .04 .16; y 12 0 .04 .16">Un día, la princesa le regaló una pulsera.</p>
+      <p data-a="o 0 1 .62 .74; y 12 0 .62 .74">El caballero prometió nunca quitársela. Y cada vez que la mirara, la recordaría a ella.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= VIII. EL ERROR ======================= -->
+<section class="scene" style="--h:270">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-storm)" data-a="o 0 1 .08 .45"/>
+      <path d="M-3000,600 C0,580 180,520 400,545 C580,572 760,510 1000,540 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <rect x="-3000" y="500" width="7000" height="3000" fill="#3a4a5a" data-a="o 0 .45 .08 .45"/>
+      <g data-a="x -520 0 .05 .4"><use href="#cloud" fill="#5b6178" transform="translate(220 150) scale(1.5)"/><use href="#cloud" fill="#6a7089" transform="translate(360 230) scale(1.1)"/></g>
+      <g data-a="x 520 0 .05 .4"><use href="#cloud" fill="#5b6178" transform="translate(760 140) scale(1.6)"/><use href="#cloud" fill="#6a7089" transform="translate(640 220) scale(1)"/></g>
+      <g data-a="o 0 1 .5 .6"><rect class="rain" x="-3000" y="-3000" width="7000" height="4000" fill="url(#p-rain)"/></g>
+      <g transform="translate(400 650)"><g class="bob"><use href="#knight-b"/><use href="#kface-happy" data-a="o 1 0 .4 .46"/><use href="#kface-sad" data-a="o 0 1 .4 .46"/></g></g>
+      <g transform="translate(600 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy" data-a="o 1 0 .4 .46"/><use href="#pface-sad" data-a="o 0 1 .4 .46"/></g></g>
+      <g transform="translate(500 420) scale(3)">
+        <use href="#heart" fill="#ef6f8e" data-a="o 1 0 .44 .46"/>
+        <g data-a="o 0 1 .44 .46; x 0 -8 .46 .6; r 0 -14 .46 .6"><path d="M0,-5 C-4,-13 -16,-12 -14,-3 C-12,4 -2,8 0,12 L2,7 L-2,3 L3,-1 Z" fill="#ef6f8e"/></g>
+        <g data-a="o 0 1 .44 .46; x 0 8 .46 .6; r 0 14 .46 .6"><path d="M0,-5 C4,-13 16,-12 14,-3 C12,4 2,8 0,12 L2,7 L-2,3 L3,-1 Z" fill="#ef6f8e"/></g>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo VIII · El error</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Pero un día, el caballero, en su inmadurez y su tontería, cometió un error…</p>
+      <p data-a="o 0 1 .48 .6; y 12 0 .48 .6">…y le hizo daño a la princesa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= IX. LA PARTIDA ======================= -->
+<section class="scene" style="--h:290">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-storm)"/>
+      <g class="drift"><use href="#cloud" fill="#5b6178" transform="translate(200 140) scale(1.5)"/><use href="#cloud" fill="#5b6178" transform="translate(780 150) scale(1.6)"/><use href="#cloud" fill="#6a7089" transform="translate(500 90) scale(1.1)"/></g>
+      <path d="M-3000,600 C0,580 180,520 400,545 C580,572 760,510 1000,540 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#7d977f"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#62806b"/>
+      <use href="#pine" fill="#4e6a5a" transform="translate(880 650) scale(1.2)"/>
+      <g transform="translate(600 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-sad"/></g></g>
+      <g transform="translate(420 650)"><g data-a="x 0 -300 .5 .92" data-o="50% 100%"><g class="bob">
+        <use href="#knight-b"/><use href="#kface-sad"/>
+        <g transform="translate(0 -400) scale(.7)"><use href="#cloud" fill="#4a4f63"/><path d="M-30,20 l-4,14 M0,24 l-4,14 M30,20 l-4,14" stroke="#b8c6e8" stroke-width="3" stroke-linecap="round"/></g>
+      </g></g></g>
+      <g data-a="o 0 1 .14 .24; y 10 0 .14 .24">
+        <g transform="translate(620 290)"><rect width="190" height="86" rx="28" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M40,82 L22,112 L72,82" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="38" y="76" width="36" height="8" fill="#fff"/><text class="bt" x="95" y="36" text-anchor="middle">Quédate…</text><text class="bt" x="95" y="64" text-anchor="middle">déjame ayudarte.</text></g>
+      </g>
+      <g data-a="o 0 1 .3 .38; o 1 0 .46 .52">
+        <g transform="translate(190 232)"><rect width="175" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M130,58 L200,92 L160,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="128" y="52" width="34" height="8" fill="#fff"/><text class="bt" x="88" y="39" text-anchor="middle">Es lo mejor…</text></g>
+      </g>
+      <rect class="rain" x="-3000" y="-3000" width="7000" height="4000" fill="url(#p-rain)"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo IX · La partida</div>
+      <p data-a="o 0 1 .05 .17; y 12 0 .05 .17">El caballero empezó a tener problemas, y creyó que lo mejor era alejarse de la princesa.</p>
+      <p data-a="o 0 1 .42 .55; y 12 0 .42 .55">Aunque ella le pedía que se quedara para ayudarlo, él pensó que era la mejor decisión… y se fue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= X. LA DISTANCIA ======================= -->
+<section class="scene" style="--h:310">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-night)"/>
+      <use href="#stars" fill="#fff6d6"/>
+      <g data-a="x 0 -120 0 1; y 0 -30 0 1"><circle cx="560" cy="200" r="80" fill="url(#g-glow)" opacity=".5"/><circle cx="560" cy="200" r="32" fill="#fff4cf"/></g>
+      <path d="M480,700 C560,600 660,540 780,545 C900,550 1000,600 4000,620 V900 H480Z" fill="#2b3468"/>
+      <use href="#castle" transform="translate(780 552) scale(.38)"/>
+      <circle cx="780" cy="470" r="30" fill="url(#g-glow)" class="glow"/>
+      <path d="M-3000,700 V640 C0,630 150,560 290,572 C400,580 460,640 520,700 V3000 H-3000Z" fill="#34407a"/>
+      <rect x="-3000" y="690" width="7000" height="3000" fill="#232b58"/>
+      <path d="M335,440 Q555,330 770,450" stroke="#ffe9b8" stroke-width="2.5" fill="none" opacity=".45" class="shimmer" data-a="o 0 1 .12 .24"/>
+      <g transform="translate(290 575) scale(.62)"><g class="bob"><use href="#knight-b"/><use href="#kface-soft"/></g></g>
+      <circle cx="325" cy="498" r="22" fill="url(#g-glow)" class="glow"/>
+      <g transform="translate(345 470)"><g data-a="o 0 1 .18 .24; o 1 0 .86 .92; x 0 400 .22 .5; x 400 0 .58 .86; y 0 -70 .22 .36; y -70 -30 .36 .5; y -30 -80 .58 .72; y -80 0 .72 .86; sx 1 -1 .53 .56"><g transform="scale(.7)"><use href="#bird"/></g></g></g>
+      <g data-a="o 1 0 .45 .55">
+        <g class="fall" style="animation-duration:9s"><path d="M120,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#e8964a"/></g>
+        <g class="fall" style="animation-duration:11s;animation-delay:-3s"><path d="M300,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#f2b04a"/></g>
+        <g class="fall" style="animation-duration:10s;animation-delay:-6s"><path d="M480,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#d9763a"/></g>
+        <g class="fall" style="animation-duration:12s;animation-delay:-2s"><path d="M640,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#e8964a"/></g>
+        <g class="fall" style="animation-duration:9.5s;animation-delay:-7s"><path d="M820,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#f2b04a"/></g>
+        <g class="fall" style="animation-duration:10.5s;animation-delay:-4.5s"><path d="M220,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#d9763a"/></g>
+        <g class="fall" style="animation-duration:11.5s;animation-delay:-8.5s"><path d="M740,-150 q8,-8 16,0 q-8,8 -16,0z" fill="#e8964a"/></g>
+      </g>
+      <g data-a="o 0 1 .5 .6" fill="#fff">
+        <g class="fall" style="animation-duration:10s"><circle cx="100" cy="-150" r="4"/></g>
+        <g class="fall" style="animation-duration:12s;animation-delay:-2s"><circle cx="200" cy="-150" r="3"/></g>
+        <g class="fall" style="animation-duration:9s;animation-delay:-5s"><circle cx="300" cy="-150" r="5"/></g>
+        <g class="fall" style="animation-duration:11s;animation-delay:-7s"><circle cx="400" cy="-150" r="3.5"/></g>
+        <g class="fall" style="animation-duration:13s;animation-delay:-1s"><circle cx="500" cy="-150" r="4"/></g>
+        <g class="fall" style="animation-duration:10s;animation-delay:-6s"><circle cx="600" cy="-150" r="3"/></g>
+        <g class="fall" style="animation-duration:12s;animation-delay:-9s"><circle cx="700" cy="-150" r="4.5"/></g>
+        <g class="fall" style="animation-duration:9.5s;animation-delay:-3.5s"><circle cx="800" cy="-150" r="3.5"/></g>
+        <g class="fall" style="animation-duration:11s;animation-delay:-4s"><circle cx="900" cy="-150" r="4"/></g>
+        <g class="fall" style="animation-duration:12.5s;animation-delay:-8s"><circle cx="250" cy="-150" r="3"/></g>
+        <g class="fall" style="animation-duration:10.5s;animation-delay:-10s"><circle cx="650" cy="-150" r="3.5"/></g>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo X · La distancia</div>
+      <p data-a="o 0 1 .04 .15; y 12 0 .04 .15">Pero el caballero nunca dejó de pensar en ella.</p>
+      <p data-a="o 0 1 .28 .4; y 12 0 .28 .4">Se preocupaba por ella y siempre buscaba la manera de saber cómo estaba.</p>
+      <p data-a="o 0 1 .6 .72; y 12 0 .6 .72">Y así, poco a poco, pasó el tiempo…</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= XI. LA CARTA ======================= -->
+<section class="scene" style="--h:310">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-dawn)"/>
+      <circle cx="840" cy="300" r="120" fill="url(#g-glow)"/><circle cx="840" cy="300" r="46" fill="#ffe08a"/>
+      <g class="drift"><use href="#cloud" fill="#fff" transform="translate(240 160)" opacity=".9"/><use href="#cloud" fill="#fff" transform="translate(620 100) scale(.7)" opacity=".9"/></g>
+      <path d="M-3000,600 C0,580 180,520 400,545 C580,572 760,510 1000,540 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <g data-a="o 0 1 .42 .52"><use href="#tree" transform="translate(760 655) scale(1.7)"/><use href="#flower" fill="#f39ab6" transform="translate(690 735)"/><use href="#flower" fill="#fff" transform="translate(800 745)"/><use href="#flower" fill="#c7a3f0" transform="translate(300 740)"/></g>
+      <g transform="translate(590 650)"><g data-a="o 0 1 .45 .5; x 260 0 .45 .65" data-o="50% 100%"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g></g>
+      <g transform="translate(420 650)"><g data-a="x -120 0 .45 .62" data-o="50% 100%"><g class="bob"><use href="#knight-b"/><use href="#kface-soft" data-a="o 1 0 .5 .56"/><use href="#kface-love" data-a="o 0 1 .5 .56"/></g></g></g>
+      <g transform="translate(360 500)"><g data-a="o 1 0 .38 .44; x 0 470 .1 .42; y 0 -190 .1 .42"><use href="#dove"/></g></g>
+      <path d="M420,470 C480,410 540,450 590,515" stroke="#ffd66b" stroke-width="4" fill="none" stroke-linecap="round" class="shimmer" data-a="o 0 1 .66 .76"/>
+      <g data-a="o 0 1 .7 .8">
+        <g class="float"><use href="#heart" fill="#ef6f8e" transform="translate(500 380)"/></g>
+        <g class="float" style="animation-delay:-3.5s"><use href="#heart" fill="#f59ab0" transform="translate(530 400) scale(.8)"/></g>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .06">
+      <div class="chap">Capítulo XI · La carta</div>
+      <div class="ps">
+        <p data-a="o 0 1 .03 .12; o 1 0 .4 .46">Pasado un tiempo, el caballero le volvió a hablar… a través de una carta.</p>
+        <p data-a="o 0 1 .5 .6">Salieron de nuevo, y esa conexión seguía ahí, igual que desde la primera vez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= XII. EL MIEDO ======================= -->
+<section class="scene" style="--h:270">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-dusk)"/>
+      <g data-a="o 0 1 .1 .5"><use href="#stars" fill="#fff6d6" opacity=".6"/></g>
+      <path d="M-3000,600 C0,580 180,520 400,545 C580,572 760,510 1000,540 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#7a5f8e"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#5f5a82"/>
+      <use href="#pine" fill="#4a4470" transform="translate(140 655) scale(1.1)"/><use href="#pine" fill="#4a4470" transform="translate(880 650) scale(1.25)"/>
+      <g transform="translate(330 650) scale(1.15)"><g data-a="o 0 .92 .1 .4; s .6 1 .1 .45" data-o="50% 100%"><use href="#gloom"/></g></g>
+      <text class="whisper" x="250" y="300" text-anchor="middle" data-a="o 0 1 .32 .42">no eres suficiente…</text>
+      <text class="whisper" x="205" y="345" text-anchor="middle" style="font-size:16px" data-a="o 0 .8 .42 .52">no eres suficiente…</text>
+      <path d="M400,470 C470,410 540,450 600,515" stroke="#ffd66b" stroke-width="4" fill="none" stroke-linecap="round" class="shimmer" data-a="o 1 .12 .35 .75"/>
+      <g transform="translate(400 650)"><g class="bob"><use href="#knight-b"/><use href="#kface-soft" data-a="o 1 0 .28 .34"/><use href="#kface-sad" data-a="o 0 1 .28 .34"/></g></g>
+      <g transform="translate(600 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy" data-a="o 1 0 .34 .4"/><use href="#pface-soft" data-a="o 0 1 .34 .4; o 1 0 .6 .66"/><use href="#pface-sad" data-a="o 0 1 .6 .66"/></g></g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo XII · El miedo</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Pero el caballero todavía tenía miedo de no ser suficiente para ella…</p>
+      <p data-a="o 0 1 .55 .68; y 12 0 .55 .68">…y ese miedo, sin querer, la lastimaba cada vez más.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= XIII. ADIÓS ======================= -->
+<section class="scene" style="--h:290">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-sunset)"/>
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-dusk)" data-a="o 0 .8 .2 1"/>
+      <path d="M-3000,600 C0,580 180,540 400,555 C580,572 760,530 1000,545 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#b87a95"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#8c9a78"/>
+      <use href="#castle" transform="translate(760 650) scale(.8)"/>
+      <g transform="translate(360 650)"><g class="bob"><use href="#knight-b"/><use href="#kface-sad"/></g></g>
+      <circle cx="416" cy="525" r="16" fill="url(#g-glow)" class="glow" opacity=".6"/>
+      <g transform="translate(570 650)"><g data-a="x 0 190 .3 .78; s 1 .72 .3 .78; o 1 0 .7 .8" data-o="50% 100%"><g class="bob2"><use href="#princess-base"/><use href="#pface-sad"/></g></g></g>
+      <g fill="#f7b3c8">
+        <g class="fall" style="animation-duration:10s"><ellipse cx="150" cy="-150" rx="6" ry="4"/></g>
+        <g class="fall" style="animation-duration:12s;animation-delay:-3s"><ellipse cx="330" cy="-150" rx="6" ry="4"/></g>
+        <g class="fall" style="animation-duration:11s;animation-delay:-6s"><ellipse cx="520" cy="-150" rx="6" ry="4"/></g>
+        <g class="fall" style="animation-duration:9.5s;animation-delay:-8s"><ellipse cx="690" cy="-150" rx="6" ry="4"/></g>
+        <g class="fall" style="animation-duration:12.5s;animation-delay:-1.5s"><ellipse cx="860" cy="-150" rx="6" ry="4"/></g>
+        <g class="fall" style="animation-duration:10.5s;animation-delay:-4.5s"><ellipse cx="420" cy="-150" rx="6" ry="4"/></g>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Capítulo XIII · Adiós</div>
+      <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Hasta que un día, la princesa ya no quiso regresar a lo que alguna vez tuvieron…</p>
+      <p data-a="o 0 1 .62 .74; y 12 0 .62 .74">…y con mucha razón.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= LA PREGUNTA ======================= -->
+<section class="question" id="pregunta">
+  <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+    <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-night)"/>
+    <use href="#stars" fill="#fff6d6"/>
+    <path d="M540,700 C600,620 680,570 790,572 C900,575 1000,610 4000,630 V900 H540Z" fill="#2b3468"/>
+    <use href="#castle" transform="translate(800 580) scale(.32)"/>
+    <path d="M-3000,700 V650 C100,640 300,610 460,630 C560,645 620,690 660,800 V3000 H-3000Z" fill="#34407a"/>
+    <rect x="-3000" y="740" width="7000" height="3000" fill="#232b58"/>
+    <g transform="translate(400 655) scale(.6)"><g class="bob"><use href="#knight-b"/><use href="#kface-soft"/></g></g>
+    <circle cx="434" cy="580" r="26" fill="url(#g-glow)" class="glow"/>
+  </svg>
+  <div class="qcard">
+    <div class="chap">Y ahora, tú decides…</div>
+    <h2>¿El caballero debería seguir luchando por su princesa, como él prometió que siempre lo haría?</h2>
+    <div class="choices">
+      <button class="choice yes" data-choice="si">Sí</button>
+      <button class="choice no" data-choice="no">No</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- ======================= SÍ ========================== -->
+<!-- ===================================================== -->
+<div class="branch" data-branch="si">
+
+<section class="scene" style="--h:250">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-dawn)"/>
+      <g transform="translate(500 420)"><g data-a="o 0 .5 .1 .5"><g class="spin"><use href="#rays" fill="#fff3c0"/></g></g></g>
+      <path d="M-3000,600 C0,580 180,520 400,545 C580,572 760,510 1000,540 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <use href="#pine" fill="#6aa877" transform="translate(170 655) scale(1.1)"/><use href="#pine" fill="#6aa877" transform="translate(850 655) scale(1.2)"/>
+      <g transform="translate(500 650)"><g data-a="s .92 1.04 0 .7" data-o="50% 100%"><g class="bob"><use href="#knight-armed"/><use href="#kface-brave"/></g></g></g>
+      <g transform="translate(556 525)"><g data-a="o .3 1 .4 .6; s .6 1.6 .4 .6"><circle r="28" fill="url(#g-glow)" class="glow"/></g></g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">La promesa</div>
+      <p data-a="o 0 1 .04 .16; y 12 0 .04 .16">Pero el caballero recordó su promesa: luchar siempre por su princesa.</p>
+      <p data-a="o 0 1 .45 .58; y 12 0 .45 .58">Tomó su espada y su escudo… y la pulsera en su muñeca brilló más fuerte que nunca.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" style="--h:290">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-forest)"/>
+      <circle cx="220" cy="140" r="30" fill="#e8f0ff" opacity=".8"/>
+      <g fill="#16292f"><use href="#pine" transform="translate(120 600) scale(1.5)"/><use href="#pine" transform="translate(260 590) scale(1.3)"/><use href="#pine" transform="translate(420 600) scale(1.6)"/><use href="#pine" transform="translate(580 590) scale(1.4)"/><use href="#pine" transform="translate(740 600) scale(1.6)"/><use href="#pine" transform="translate(890 590) scale(1.4)"/></g>
+      <rect x="-3000" y="630" width="7000" height="3000" fill="#1f3a3a"/>
+      <g fill="#dfe9ff" opacity=".12" class="drift"><ellipse cx="300" cy="620" rx="260" ry="30"/><ellipse cx="760" cy="640" rx="280" ry="26"/></g>
+      <g data-a="o 0 1 .7 .95" fill="#fff5c0" opacity=".2"><path d="M300,-200 L380,-200 L620,800 L420,800Z"/><path d="M600,-200 L650,-200 L860,800 L720,800Z"/></g>
+      <g data-a="x 0 260 .55 .85; o 1 0 .6 .85">
+        <g transform="translate(720 615) scale(.8)"><g data-a="sx 1 -1 .54 .56" data-o="50% 100%"><use href="#wolf"/></g></g>
+        <g transform="translate(650 650) scale(1.1)"><g data-a="sx 1 -1 .54 .56" data-o="50% 100%"><use href="#wolf"/></g></g>
+        <g transform="translate(800 648)"><g data-a="sx 1 -1 .54 .56" data-o="50% 100%"><use href="#wolf"/></g></g>
+      </g>
+      <g transform="translate(720 470)" data-a="o 0 1 .06 .14; o 1 0 .55 .62"><path d="M-100,-20 h200 l-14,20 14,20 h-200 l14,-20z" fill="#fffaf0" stroke="#b07a2a" stroke-width="3"/><text class="lbl" y="6" text-anchor="middle">Las dudas</text></g>
+      <g transform="translate(320 650)"><g data-a="x 0 90 .15 .5" data-o="50% 100%"><g class="bob"><use href="#knight-armed"/><use href="#kface-brave"/></g></g></g>
+      <path d="M530,380 Q620,470 570,600" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" data-a="o 0 1 .48 .52; o 1 0 .55 .62"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">El Bosque de las Dudas</div>
+      <p data-a="o 0 1 .04 .16; y 12 0 .04 .16">Atravesó el Bosque de las Dudas, donde los lobos le aullaban que no lo lograría.</p>
+      <p data-a="o 0 1 .56 .68; y 12 0 .56 .68">Pero él siguió adelante, sin rendirse.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" style="--h:290">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="#8a93a8" opacity=".35"/>
+      <g class="drift"><use href="#cloud" fill="#eef1f7" transform="translate(220 150) scale(1.2)"/><use href="#cloud" fill="#eef1f7" transform="translate(760 120)"/></g>
+      <path d="M-3000,600 C0,580 180,540 400,555 C580,572 760,530 1000,545 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#9cc98c"/>
+      <rect x="-3000" y="660" width="7000" height="3000" fill="#6fb6d9"/>
+      <path d="M-3000,700 H4000 M-3000,740 H4000" stroke="#a9d8ef" stroke-width="3" stroke-dasharray="30 24"/>
+      <rect x="-3000" y="636" width="3100" height="3000" fill="#8cc67a"/>
+      <rect x="900" y="636" width="3100" height="3000" fill="#8cc67a"/>
+      <rect x="80" y="640" width="840" height="30" fill="#b9a99a"/>
+      <path d="M80,670 H920 V800 H860 C860,730 760,696 500,696 C240,696 140,730 140,800 H80Z" fill="#a89888"/>
+      <path d="M160,655 h40 M260,655 h50 M380,655 h40 M500,655 h50 M620,655 h40 M740,655 h50 M860,655 h30" stroke="#a49484" stroke-width="3"/>
+      <g transform="translate(660 645)"><g data-a="s 1 .35 .52 .75; x 0 200 .6 .85; o 1 0 .75 .88; sx 1 -1 .6 .62" data-o="50% 100%"><g class="bob2"><use href="#beast"/></g></g></g>
+      <g transform="translate(660 350)" data-a="o 0 1 .06 .14; o 1 0 .5 .58"><path d="M-110,-20 h220 l-14,20 14,20 h-220 l14,-20z" fill="#fffaf0" stroke="#b07a2a" stroke-width="3"/><text class="lbl" y="6" text-anchor="middle">La inmadurez</text></g>
+      <g transform="translate(330 645)"><g data-a="x 0 70 .12 .45" data-o="50% 100%"><g class="bob"><use href="#knight-armed"/><use href="#kface-brave"/></g></g></g>
+      <path d="M520,400 Q610,470 560,600" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" data-a="o 0 1 .46 .5; o 1 0 .53 .6"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">El Puente de la Inmadurez</div>
+      <p data-a="o 0 1 .04 .16; y 12 0 .04 .16">Luego llegó al Puente de la Inmadurez, donde vivía la bestia que un día lo hizo equivocarse.</p>
+      <p data-a="o 0 1 .56 .68; y 12 0 .56 .68">Esta vez, el caballero no la dejó ganar.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" style="--h:350">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-fire)"/>
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-gold)" data-a="o 0 1 .76 1"/>
+      <path d="M-3000,620 L-3000,560 L60,560 L200,380 L330,560 L560,560 L760,330 L960,560 L4000,560 V760 H-3000Z" fill="#3a1830" opacity=".8"/>
+      <path d="M170,420 L200,380 L232,424 L214,414 L200,430 L186,414Z" fill="#f59a4a" opacity=".6"/>
+      <path d="M840,640 V400 h60 V640Z M830,400 L870,340 L910,400Z" fill="#2e1128" opacity=".75"/>
+      <rect x="-3000" y="636" width="7000" height="3000" fill="#4a2a33"/>
+      <rect x="-3000" y="636" width="7000" height="3000" fill="#9a8a6a" data-a="o 0 .6 .76 1"/>
+      <g fill="#3a2029"><ellipse cx="200" cy="700" rx="40" ry="14"/><ellipse cx="780" cy="720" rx="50" ry="16"/><ellipse cx="480" cy="760" rx="30" ry="10"/></g>
+      <g transform="translate(720 650)"><g data-a="y 0 -8 .25 .45; s 1 .2 .72 .9; x 0 260 .72 .95; y -8 -380 .72 .95; o 1 0 .88 .96"><g class="bob2"><use href="#dragon"/></g></g></g>
+      <g transform="translate(650 225)" data-a="o 0 1 .05 .15; o 1 0 .7 .78"><path d="M-170,-20 h340 l-14,20 14,20 h-340 l14,-20z" fill="#fffaf0" stroke="#b07a2a" stroke-width="3"/><text class="lbl" y="6" text-anchor="middle" style="font-size:15px">El miedo a no ser suficiente</text></g>
+      <g data-a="o 0 1 .28 .34; o 1 0 .5 .56"><g class="flicker"><path d="M534,372 C470,372 380,410 262,452 C250,480 250,520 262,548 C380,500 470,420 534,392Z" fill="url(#g-flame)"/></g></g>
+      <circle cx="236" cy="500" r="70" fill="url(#g-glow)" data-a="o 0 1 .3 .36; o 1 0 .5 .56"/>
+      <g transform="translate(300 650)"><g data-a="x 0 110 .56 .7" data-o="50% 100%"><g class="bob"><use href="#knight-armed"/><use href="#kface-brave"/></g></g></g>
+      <path d="M560,250 Q650,330 600,440" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" data-a="o 0 1 .66 .7; o 1 0 .72 .78"/>
+      <g data-a="o 0 1 .8 .9" fill="#fff7c2"><use href="#star" class="tw" transform="translate(300 300)"/><use href="#star" class="tw" style="animation-delay:-1s" transform="translate(700 260) scale(.8)"/><use href="#star" class="tw" style="animation-delay:-2s" transform="translate(560 400) scale(.7)"/></g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .06">
+      <div class="chap">El Dragón del Miedo</div>
+      <p data-a="o 0 1 .04 .15; y 12 0 .04 .15">Y al final del camino lo esperaba el más grande de todos: el dragón del miedo a no ser suficiente.</p>
+      <p data-a="o 0 1 .58 .7; y 12 0 .58 .7">El caballero levantó su escudo, resistió el fuego… y por fin lo venció.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" style="--h:320">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-dawn)"/>
+      <g data-a="y 0 -220 0 1"><circle cx="330" cy="560" r="150" fill="url(#g-glow)"/><circle cx="330" cy="560" r="56" fill="#ffe08a"/></g>
+      <path d="M-3000,600 C0,580 180,540 400,555 C580,572 760,530 1000,545 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#b6e09d"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
+      <use href="#tower" transform="translate(720 650) scale(.9)"/>
+      <g transform="translate(720 650)"><g data-a="o 1 0 .15 .42; s 1 .85 .15 .42" data-o="50% 100%"><g transform="translate(-720 -650)">
+        <g stroke="#2f4a2a" stroke-width="12" fill="none" stroke-linecap="round">
+          <path d="M630,650 C600,560 700,560 680,480 C664,420 740,410 760,360"/>
+          <path d="M810,650 C850,570 740,560 770,480 C790,430 700,420 690,380"/>
+          <path d="M660,650 C700,600 760,610 800,560"/>
+        </g>
+        <path d="M622,600 l-16,-6 l12,-10z M660,540 l-8,-16 l14,4z M690,470 l16,-8 l-4,14z M740,400 l-14,-10 l16,-4z M840,600 l16,-4 l-10,12z M780,520 l14,8 l-14,6z M760,450 l-16,4 l8,-14z M712,395 l10,-14 l4,16z M700,610 l6,-16 l8,12z" fill="#2f4a2a"/>
+        <g fill="#4f7a45"><ellipse cx="650" cy="570" rx="9" ry="5"/><ellipse cx="770" cy="500" rx="9" ry="5"/><ellipse cx="700" cy="440" rx="8" ry="5"/><ellipse cx="820" cy="610" rx="9" ry="5"/></g>
+      </g></g></g>
+      <g transform="translate(720 410)" data-a="o 0 1 .04 .1; o 1 0 .14 .24"><path d="M-110,-20 h220 l-14,20 14,20 h-220 l14,-20z" fill="#fffaf0" stroke="#b07a2a" stroke-width="3"/><text class="lbl" y="6" text-anchor="middle">Los problemas</text></g>
+      <g data-a="o 0 1 .18 .3; o 1 0 .45 .55" fill="#fff7c2"><use href="#star" class="tw" transform="translate(660 520)"/><use href="#star" class="tw" style="animation-delay:-1s" transform="translate(780 460) scale(.8)"/><use href="#star" class="tw" style="animation-delay:-2s" transform="translate(720 600) scale(.9)"/><use href="#star" class="tw" style="animation-delay:-.5s" transform="translate(690 420) scale(.6)"/></g>
+      <g transform="translate(560 650)"><g data-a="o 0 1 .42 .5; x 160 0 .5 .75; s .9 1 .5 .75" data-o="50% 100%"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g></g>
+      <g transform="translate(330 650)"><g data-a="x 0 60 .7 .82" data-o="50% 100%"><g class="bob"><use href="#knight-armed"/><use href="#kface-brave" data-a="o 1 0 .68 .74"/><use href="#kface-love" data-a="o 0 1 .68 .74"/></g></g></g>
+      <g transform="translate(475 330)">
+        <use href="#heart" fill="#ef6f8e" data-a="o 0 1 .8 .86; x 0 -50 .8 .95; y 0 -110 .8 .95; s .3 1.2 .8 .95"/>
+        <use href="#heart" fill="#f59ab0" data-a="o 0 1 .8 .86; x 0 60 .8 .95; y 0 -100 .8 .95; s .3 1.1 .8 .95"/>
+        <use href="#heart" fill="#e0525e" data-a="o 0 1 .82 .88; y 0 -170 .82 .97; s .3 1.4 .82 .97"/>
+      </g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .06">
+      <div class="chap">El rescate</div>
+      <p data-a="o 0 1 .04 .15; y 12 0 .04 .15">Las espinas de los problemas que rodeaban la torre se desvanecieron, una a una…</p>
+      <p data-a="o 0 1 .55 .68; y 12 0 .55 .68">Y el caballero, por fin, llegó hasta su princesa.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" style="--h:220">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-pink)"/>
+      <circle cx="500" cy="590" r="220" fill="url(#g-glowp)"/>
+      <g class="drift"><use href="#cloud" fill="#fff" transform="translate(170 250)" opacity=".85"/><use href="#cloud" fill="#fff" transform="translate(840 300) scale(.8)" opacity=".85"/></g>
+      <path d="M-3000,600 C0,580 180,540 400,555 C580,572 760,530 1000,545 C1300,580 3000,570 4000,580 V760 H-3000Z" fill="#c9e3a4"/>
+      <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#a6d48c"/>
+      <g>
+        <g class="float2"><use href="#heart" fill="#ef6f8e" transform="translate(220 700) scale(1.2)"/></g>
+        <g class="float2" style="animation-delay:-1.5s"><use href="#heart" fill="#f59ab0" transform="translate(320 740)"/></g>
+        <g class="float2" style="animation-delay:-3s"><use href="#heart" fill="#e0525e" transform="translate(690 720) scale(1.3)"/></g>
+        <g class="float2" style="animation-delay:-4.5s"><use href="#heart" fill="#ef6f8e" transform="translate(790 760)"/></g>
+        <g class="float2" style="animation-delay:-6s"><use href="#heart" fill="#f59ab0" transform="translate(260 760) scale(.9)"/></g>
+        <g class="float2" style="animation-delay:-7.5s"><use href="#heart" fill="#e0525e" transform="translate(740 700) scale(.8)"/></g>
+      </g>
+      <g transform="translate(435 650)"><g class="bob"><use href="#knight-b"/><use href="#kface-love"/></g></g>
+      <g transform="translate(575 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <g transform="translate(505 262)"><g data-a="o 0 1 .1 .25; s .3 1 .1 .25"><g class="pulse"><use href="#heart" fill="#e0525e" transform="scale(1.8)"/></g></g></g>
+      <use href="#flower" fill="#fff" transform="translate(250 740)"/><use href="#flower" fill="#f39ab6" transform="translate(330 725)"/><use href="#flower" fill="#c7a3f0" transform="translate(680 740)"/><use href="#flower" fill="#ff9e80" transform="translate(760 725)"/>
+    </svg>
+    <div class="finale">
+      <h2 data-a="o 0 1 .05 .25; y 20 0 .05 .25">¿Qué esperas para decirle a tu caballero?</h2>
+      <div class="cont" data-a="o 0 1 .35 .5">Continuará…</div>
+      <button class="again" data-restart data-a="o 0 1 .5 .6">Volver a leer desde el inicio</button>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ===================================================== -->
+<!-- ======================= NO ========================== -->
+<!-- ===================================================== -->
+<div class="branch" data-branch="no">
+
+<section class="scene" style="--h:280">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-sunset)"/>
+      <g data-a="y 0 110 0 1"><circle cx="560" cy="470" r="150" fill="url(#g-glow)" opacity=".8"/><circle cx="560" cy="470" r="60" fill="#ffd36a"/></g>
+      <g class="drift" opacity=".8"><use href="#cloud" fill="#ffd9e2" transform="translate(760 180)"/><use href="#cloud" fill="#ffd9e2" transform="translate(300 130) scale(.7)"/></g>
+      <path d="M-3000,640 C200,620 400,560 600,560 C800,560 900,600 4000,610 V800 H-3000Z" fill="#c07a98"/>
+      <use href="#castle" transform="translate(740 578) scale(.36)"/>
+      <rect x="-3000" y="630" width="7000" height="3000" fill="#9a8a78"/>
+      <g transform="translate(690 604) scale(.32)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <g transform="translate(650 604) scale(.5)"><use href="#flower" fill="#f39ab6"/></g><g transform="translate(730 606) scale(.5)"><use href="#flower" fill="#fff"/></g><g transform="translate(760 602) scale(.45)"><use href="#flower" fill="#c7a3f0"/></g>
+      <g class="flut"><use href="#butterfly" fill="#fff3a8" transform="translate(715 520) scale(.6)"/></g>
+      <path d="M-3000,800 V600 C0,600 150,590 240,590 C360,588 460,610 560,680 C600,710 620,760 640,800 V3000 H-3000Z" fill="#6b4a78"/>
+      <g transform="translate(320 592) scale(.9)"><g class="bob"><use href="#knight-b"/><use href="#kface-soft"/></g></g>
+      <circle cx="370" cy="480" r="20" fill="url(#g-glow)" class="glow"/>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">El atardecer</div>
+      <p data-a="o 0 1 .04 .16; y 12 0 .04 .16">El caballero entendió que su princesa estaría bien, incluso sin él.</p>
+      <p data-a="o 0 1 .5 .62; y 12 0 .5 .62">Porque ella era fuerte, valiente, y brillaba con luz propia.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" style="--h:300">
+  <div class="stage">
+    <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-night)"/>
+      <g data-a="o 0 1 0 .3"><use href="#stars" fill="#fff6d6"/></g>
+      <circle cx="850" cy="140" r="80" fill="url(#g-glow)" opacity=".5"/><circle cx="850" cy="140" r="32" fill="#fff4cf"/>
+      <g transform="translate(150 120)"><g data-a="o 0 1 .34 .38; o 1 0 .48 .52; x 0 520 .34 .52; y 0 150 .34 .52"><path d="M0,0 L-70,-18" stroke="#fff6d6" stroke-width="3" stroke-linecap="round" opacity=".7"/><use href="#star" fill="#fff6d6"/></g></g>
+      <path d="M-3000,640 C200,620 400,560 600,560 C800,560 900,600 4000,610 V800 H-3000Z" fill="#3a3a78"/>
+      <use href="#castle" transform="translate(740 578) scale(.36)"/>
+      <circle cx="740" cy="500" r="26" fill="url(#g-glow)" class="glow"/>
+      <rect x="-3000" y="630" width="7000" height="3000" fill="#2b3160"/>
+      <path d="M-3000,800 V600 C0,600 150,590 240,590 C360,588 460,610 560,680 C600,710 620,760 640,800 V3000 H-3000Z" fill="#34407a"/>
+      <path d="M372,478 Q560,370 740,500" stroke="#ffd66b" stroke-width="3" fill="none" stroke-linecap="round" class="shimmer" data-a="o 0 .8 .45 .6"/>
+      <g transform="translate(320 592) scale(.9)"><g class="bob"><use href="#knight-b"/><use href="#kface-soft"/></g></g>
+      <g transform="translate(370 480)"><g data-a="s 1 2.2 .4 .6; o .6 1 .4 .6"><circle r="20" fill="url(#g-glow)" class="glow"/></g></g>
+    </svg>
+    <div class="card" data-a="o 0 1 0 .08">
+      <div class="chap">Siempre</div>
+      <p data-a="o 0 1 .04 .16; y 12 0 .04 .16">Pero él siempre estaría ahí, cada vez que ella lo llamara.</p>
+      <p data-a="o 0 1 .45 .58; y 12 0 .45 .58">Porque un caballero jamás abandona a su princesa.</p>
+      <p class="fin" data-a="o 0 1 .74 .86">Fin</p>
+      <button class="again" data-restart data-a="o 0 1 .8 .9">Volver a leer desde el inicio</button>
+    </div>
+  </div>
+</section>
+</div>
+
+</main>
+
+<script>
+(function(){
+  var bar=document.getElementById('bar');
+  var arts=[].slice.call(document.querySelectorAll('svg.art'));
+
+  // En pantallas verticales (celular) se recorta el dibujo al centro para que los personajes se vean grandes
+  function fit(){
+    var portrait=innerWidth/innerHeight<.85;
+    var vb=portrait?'180 -140 640 940':'0 -140 1000 940';
+    arts.forEach(function(s){s.setAttribute('viewBox',vb);});
+  }
+
+  // data-a="prop desde hasta inicio fin; ..."  (prop: x, y, s, sx, r, o) — el avance va de 0 a 1 dentro de cada escena
+  function parse(str){
+    var o={};
+    str.split(';').forEach(function(seg){
+      var t=seg.trim().split(/\s+/);
+      if(t.length<5)return;
+      (o[t[0]]=o[t[0]]||[]).push({f:+t[1],t:+t[2],a:+t[3],b:+t[4]});
+    });
+    for(var k in o)o[k].sort(function(m,n){return m.a-n.a;});
+    return o;
+  }
+  function ease(q){return q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2;}
+  function val(l,p){
+    var v=l[0].f;
+    for(var i=0;i<l.length;i++){
+      var s=l[i];
+      if(p<=s.a)break;
+      if(p>=s.b){v=s.t;continue;}
+      v=s.f+(s.t-s.f)*ease((p-s.a)/(s.b-s.a));break;
+    }
+    return v;
+  }
+  function apply(it,p){
+    var a=it.an;
+    if(a.x||a.y||a.s||a.r||a.sx){
+      var x=a.x?val(a.x,p):0,y=a.y?val(a.y,p):0,s=a.s?val(a.s,p):1,r=a.r?val(a.r,p):0,sx=a.sx?val(a.sx,p):1;
+      it.el.style.transform='translate('+x.toFixed(2)+'px,'+y.toFixed(2)+'px) rotate('+r.toFixed(2)+'deg) scale('+(s*sx).toFixed(3)+','+s.toFixed(3)+')';
+    }
+    if(a.o)it.el.style.opacity=val(a.o,p).toFixed(3);
+  }
+
+  var scenes=[].slice.call(document.querySelectorAll('.scene')).map(function(sc){
+    return {sc:sc,stage:sc.querySelector('.stage'),svg:sc.querySelector('svg.art'),near:true,p:-1,items:[].slice.call(sc.querySelectorAll('[data-a]')).map(function(el){
+      if(el.dataset.o)el.style.transformOrigin=el.dataset.o;
+      return {el:el,an:parse(el.dataset.a)};
+    })};
+  });
+
+  function update(){
+    var vh=innerHeight,max=document.documentElement.scrollHeight-vh;
+    bar.style.width=(max>0?Math.min(100,scrollY/max*100):0)+'%';
+    for(var i=0;i<scenes.length;i++){
+      var S=scenes[i],r=S.sc.getBoundingClientRect();
+      // las escenas lejanas pausan sus animaciones para cuidar la batería del celular
+      var near=r.height>0&&r.bottom>-vh&&r.top<vh*2;
+      if(near!==S.near&&S.svg&&S.svg.pauseAnimations){S.near=near;near?S.svg.unpauseAnimations():S.svg.pauseAnimations();}
+      if(r.height===0||r.bottom<-10||r.top>vh+10)continue;
+      var total=r.height-S.stage.offsetHeight;
+      var p=total>0?Math.min(1,Math.max(0,-r.top/total)):0;
+      if(Math.abs(S.p-p)<.0005)continue;
+      S.p=p;
+      for(var j=0;j<S.items.length;j++)apply(S.items[j],p);
+    }
+  }
+  addEventListener('scroll',update,{passive:true});
+  addEventListener('resize',function(){fit();scenes.forEach(function(S){S.p=-1;});update();});
+
+  // Elegir Sí / No
+  [].forEach.call(document.querySelectorAll('[data-choice]'),function(btn){
+    btn.addEventListener('click',function(){
+      var c=btn.dataset.choice;
+      [].forEach.call(document.querySelectorAll('.branch'),function(b){b.classList.toggle('show',b.dataset.branch===c);});
+      [].forEach.call(document.querySelectorAll('[data-choice]'),function(b){b.classList.toggle('picked',b===btn);});
+      scenes.forEach(function(S){S.p=-1;});
+      update();
+      var target=document.querySelector('.branch[data-branch="'+c+'"]');
+      setTimeout(function(){target.scrollIntoView({behavior:'smooth',block:'start'});},80);
+    });
+  });
+  [].forEach.call(document.querySelectorAll('[data-restart]'),function(b){
+    b.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});
+  });
+
+  fit();
+  scenes.forEach(function(S){S.items.forEach(function(it){apply(it,0);});S.p=0;});
+  update();
+})();
+</script>
+</body>
+</html>
