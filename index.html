@@ -67,8 +67,8 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
 .branch{display:none}.branch.show{display:block}
 
 /* Final */
-.finale{position:absolute;left:0;right:0;top:calc(9vh + env(safe-area-inset-top));text-align:center;padding:0 18px;color:#fff;z-index:2}
-.finale h2{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,3.4vw + 12px,58px);line-height:1.2;text-shadow:0 3px 18px rgba(150,40,90,.45)}
+.finale{position:absolute;left:0;right:0;top:calc(6vh + env(safe-area-inset-top));text-align:center;padding:0 18px;color:#fff;z-index:2}
+.finale h2{font-family:'Cinzel Decorative',serif;font-size:clamp(24px,2.6vw + 12px,46px);line-height:1.2;text-shadow:0 3px 18px rgba(150,40,90,.45)}
 .cont{font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(32px,2.5vw + 18px,56px);color:#fff4d6;margin-top:14px;text-shadow:0 2px 12px rgba(120,30,70,.35)}
 .again{display:inline-block;margin-top:16px;font:800 15px 'Nunito',sans-serif;color:#5b3419;background:#fffaf0;border:2px solid var(--gold);border-radius:999px;padding:10px 20px;cursor:pointer}
 
@@ -280,6 +280,15 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
   <g id="kface-sad"><path d="M-31,-287 Q-20,-291 -8,-299 M8,-299 Q20,-291 31,-287" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M-11,-238 Q0,-247 11,-238" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
   <!-- avergonzado: ojos apretados > <, cara colorada y rayitas de rubor -->
   <g id="kface-shy"><path d="M-31,-290 Q-20,-296 -8,-302 M8,-302 Q20,-296 31,-290" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f3cda8"><ellipse cx="-19" cy="-274" rx="9" ry="10.5"/><ellipse cx="19" cy="-274" rx="9" ry="10.5"/></g><path d="M-27,-282 L-13,-275 L-27,-268 M27,-282 L13,-275 L27,-268" stroke="#2a1f1c" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="0" cy="-256" rx="44" ry="12" fill="#ff6f7d" opacity=".28"/><g fill="#f06c7a" opacity=".8"><ellipse cx="-33" cy="-254" rx="12" ry="9"/><ellipse cx="33" cy="-254" rx="12" ry="9"/></g><path d="M-37,-259 l-4,8 M-31,-259 l-4,8 M-25,-259 l-4,8 M29,-259 l-4,8 M35,-259 l-4,8 M41,-259 l-4,8" stroke="#d63c50" stroke-width="2.2" stroke-linecap="round"/><path d="M-12,-242 Q-6,-238 0,-242 Q6,-246 12,-242" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <!-- haciendo mucho esfuerzo: cejas fruncidas, ojos apretados y dientes apretados -->
+  <g id="kface-strain"><path d="M-31,-298 Q-20,-295 -7,-286 M7,-286 Q20,-295 31,-298" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f3cda8"><ellipse cx="-19" cy="-274" rx="9" ry="10.5"/><ellipse cx="19" cy="-274" rx="9" ry="10.5"/></g><path d="M-27,-280 L-13,-274 L-27,-269 M27,-280 L13,-274 L27,-269" stroke="#2a1f1c" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><g fill="#f2939a" opacity=".55"><circle cx="-34" cy="-254" r="9"/><circle cx="34" cy="-254" r="9"/></g><rect x="-13" y="-252" width="26" height="11" rx="4" fill="#fff" stroke="#7a3b2e" stroke-width="2.5"/><path d="M-12,-246.5 H12 M-5,-251 V-242 M1,-251 V-242 M7,-251 V-242" stroke="#7a3b2e" stroke-width="1.5"/></g>
+  <!-- la espada brillando (va encima de #sword, en la misma posición) -->
+  <filter id="f-blur" x="-150%" y="-20%" width="400%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>
+  <g id="sword-glow"><g transform="rotate(24 56 -112)">
+    <rect x="44" y="-322" width="24" height="206" rx="12" fill="#ffe066" filter="url(#f-blur)"/>
+    <path d="M52,-120 V-298 L56,-314 L60,-298 V-120Z" fill="#fffef4" stroke="#fff3b0" stroke-width="3" stroke-linejoin="round"/>
+    <use href="#star" fill="#fffbe0" transform="translate(56 -322) scale(2.8)"/>
+  </g></g>
   <g id="kface-brave"><path d="M-31,-299 Q-20,-297 -8,-289 M8,-289 Q20,-297 31,-299" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".3"><circle cx="-33" cy="-254" r="9"/><circle cx="33" cy="-254" r="9"/></g><path d="M-11,-244 Q0,-238 11,-244" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
 
   <!-- ======= LA PRINCESA: sonrisa hermosa, cabello castaño, ojos brillantes ======= -->
@@ -1009,29 +1018,45 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
   </div>
 </section>
 
-<section class="scene" style="--h:350">
+<section class="scene" style="--h:460">
   <div class="stage">
     <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
       <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-fire)"/>
-      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-gold)" data-a="o 0 1 .76 1"/>
+      <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-gold)" data-a="o 0 1 .84 1"/>
       <path d="M-3000,620 L-3000,560 L60,560 L200,380 L330,560 L560,560 L760,330 L960,560 L4000,560 V760 H-3000Z" fill="#3a1830" opacity=".8"/>
       <path d="M170,420 L200,380 L232,424 L214,414 L200,430 L186,414Z" fill="#f59a4a" opacity=".6"/>
       <path d="M840,640 V400 h60 V640Z M830,400 L870,340 L910,400Z" fill="#2e1128" opacity=".75"/>
       <rect x="-3000" y="636" width="7000" height="3000" fill="#4a2a33"/>
-      <rect x="-3000" y="636" width="7000" height="3000" fill="#9a8a6a" data-a="o 0 .6 .76 1"/>
+      <rect x="-3000" y="636" width="7000" height="3000" fill="#9a8a6a" data-a="o 0 .6 .84 1"/>
       <g fill="#3a2029"><ellipse cx="200" cy="700" rx="40" ry="14"/><ellipse cx="780" cy="720" rx="50" ry="16"/><ellipse cx="480" cy="760" rx="30" ry="10"/></g>
-      <g transform="translate(720 650)"><g data-a="y 0 -8 .25 .45; s 1 .2 .72 .9; x 0 260 .72 .95; y -8 -380 .72 .95; o 1 0 .88 .96"><g class="bob2"><use href="#dragon"/></g></g></g>
-      <g transform="translate(650 225)" data-a="o 0 1 .05 .15; o 1 0 .7 .78"><path d="M-170,-20 h340 l-14,20 14,20 h-340 l14,-20z" fill="#fffaf0" stroke="#b07a2a" stroke-width="3"/><text class="lbl" y="6" text-anchor="middle" style="font-size:15px">El miedo a no ser suficiente</text></g>
-      <g data-a="o 0 1 .28 .34; o 1 0 .5 .56"><g class="flicker"><path d="M534,372 C470,372 380,410 262,452 C250,480 250,520 262,548 C380,500 470,420 534,392Z" fill="url(#g-flame)"/></g></g>
-      <circle cx="236" cy="500" r="70" fill="url(#g-glow)" data-a="o 0 1 .3 .36; o 1 0 .5 .56"/>
-      <g transform="translate(300 650)"><g data-a="x 0 110 .56 .7" data-o="50% 100%"><g class="bob"><use href="#knight-armed"/><use href="#kface-brave"/></g></g></g>
-      <path d="M560,250 Q650,330 600,440" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" data-a="o 0 1 .66 .7; o 1 0 .72 .78"/>
-      <g data-a="o 0 1 .8 .9" fill="#fff7c2"><use href="#star" class="tw" transform="translate(300 300)"/><use href="#star" class="tw" style="animation-delay:-1s" transform="translate(700 260) scale(.8)"/><use href="#star" class="tw" style="animation-delay:-2s" transform="translate(560 400) scale(.7)"/></g>
+      <!-- el dragón Miedo: ataca, retrocede ante la luz y al final sale volando -->
+      <g transform="translate(720 650)"><g data-a="y 0 -8 .16 .3; x 0 30 .6 .66; s 1 .2 .84 .96; x 30 290 .84 .97; y -8 -380 .84 .97; o 1 0 .92 .98"><g class="bob2"><use href="#dragon"/></g></g></g>
+      <g transform="translate(650 225)" data-a="o 0 1 .05 .14; o 1 0 .8 .86"><path d="M-100,-24 h200 l-14,24 14,24 h-200 l14,-24z" fill="#fffaf0" stroke="#b07a2a" stroke-width="3"/><text class="lbl" y="9" text-anchor="middle" style="font-size:26px;fill:#8a2a2a">Miedo</text></g>
+      <!-- el fuego empuja al caballero… hasta que la luz de la espada lo hace retroceder -->
+      <g data-a="o 0 1 .22 .28; sx 1 .05 .6 .66; o 1 0 .62 .66" data-o="100% 50%"><g class="flicker"><path d="M534,372 C470,372 380,410 262,452 C250,480 250,520 262,548 C380,500 470,420 534,392Z" fill="url(#g-flame)"/></g></g>
+      <circle cx="236" cy="500" r="70" fill="url(#g-glow)" data-a="o 0 1 .24 .3; o 1 0 .58 .62"/>
+      <g transform="translate(330 650)"><g data-a="x 0 -35 .24 .38; r 0 -7 .24 .38; s 1 .93 .24 .38; r -7 0 .52 .6; s .93 1 .52 .6; x -35 90 .74 .84" data-o="50% 100%"><g class="bob">
+        <use href="#knight-armed"/>
+        <use href="#kface-brave" data-a="o 1 0 .26 .3; o 0 1 .52 .56"/>
+        <use href="#kface-strain" data-a="o 0 1 .26 .3; o 1 0 .52 .56"/>
+        <g data-a="o 0 1 .3 .36; o 1 0 .52 .56"><g class="sweat"><path d="M62,-322 q-6,10 0,14 q6,-4 0,-14z" fill="#9fd8f7"/></g><g class="sweat" style="animation-delay:-.9s"><path d="M-64,-300 q-6,10 0,14 q6,-4 0,-14z" fill="#9fd8f7"/></g></g>
+        <g data-a="o 0 1 .48 .56"><g class="glow"><circle cx="97" cy="-210" r="130" fill="url(#g-glow)"/></g><use href="#sword-glow"/></g>
+      </g></g></g>
+      <g transform="translate(395 405)"><g data-a="o 0 1 .54 .58; s .3 3.2 .54 .66; o 1 0 .62 .7"><circle r="60" fill="url(#g-glow)"/></g></g>
+      <g data-a="o 0 1 .6 .66; s .7 1 .6 .66; o 1 0 .76 .8">
+        <g transform="translate(186 140)"><rect width="300" height="86" rx="28" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M80,82 L100,130 L122,82" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="78" y="76" width="46" height="8" fill="#fff"/><text class="bt" x="150" y="37" text-anchor="middle">¡¡No dejaré que el miedo</text><text class="bt" x="150" y="64" text-anchor="middle">me haga perderla!!</text></g>
+      </g>
+      <path d="M560,250 Q650,330 600,440" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" data-a="o 0 1 .82 .85; o 1 0 .86 .9"/>
+      <g data-a="o 0 1 .9 .97" fill="#fff7c2"><use href="#star" class="tw" transform="translate(300 300)"/><use href="#star" class="tw" style="animation-delay:-1s" transform="translate(700 260) scale(.8)"/><use href="#star" class="tw" style="animation-delay:-2s" transform="translate(560 400) scale(.7)"/></g>
     </svg>
     <div class="card" data-a="o 0 1 0 .06">
       <div class="chap">El Dragón del Miedo</div>
-      <p data-a="o 0 1 .04 .15; y 12 0 .04 .15">Y al final del camino lo esperaba el más grande de todos: el dragón del miedo a no ser suficiente.</p>
-      <p data-a="o 0 1 .58 .7; y 12 0 .58 .7">El caballero levantó su escudo, resistió el fuego… y por fin lo venció.</p>
+      <p data-a="o 0 1 .03 .12; y 12 0 .03 .12">Y al final del camino lo esperaba el más grande de todos: un dragón llamado Miedo.</p>
+      <div class="ps">
+        <p data-a="o 0 1 .3 .38; o 1 0 .5 .54">Su fuego era tan fuerte que al caballero le costaba muchísimo mantenerse en pie…</p>
+        <p data-a="o 0 1 .54 .6; o 1 0 .82 .86">Pero entonces pensó en ella… y su espada empezó a brillar.</p>
+        <p data-a="o 0 1 .86 .92">Con todo su valor avanzó entre las llamas… y por fin venció al Miedo.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1093,7 +1118,7 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
       <use href="#flower" fill="#fff" transform="translate(250 740)"/><use href="#flower" fill="#f39ab6" transform="translate(330 725)"/><use href="#flower" fill="#c7a3f0" transform="translate(680 740)"/><use href="#flower" fill="#ff9e80" transform="translate(760 725)"/>
     </svg>
     <div class="finale">
-      <h2 data-a="o 0 1 .05 .25; y 20 0 .05 .25">¿Qué esperas para decirle a tu caballero?</h2>
+      <h2 data-a="o 0 1 .05 .25; y 20 0 .05 .25">¿Qué esperas para decirle a tu caballero que aún puede luchar?</h2>
       <div class="cont" data-a="o 0 1 .35 .5">Continuará…</div>
       <button class="again" data-restart data-a="o 0 1 .5 .6">Volver a leer desde el inicio</button>
     </div>
