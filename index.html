@@ -41,6 +41,7 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
 .lbl{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:17px;fill:#6b3f16}
 .hw{font-family:'Dancing Script',cursive;font-weight:700;font-size:30px;fill:#ffe9b8}
 .whisper{font-family:'Nunito',sans-serif;font-style:italic;font-weight:700;font-size:20px;fill:#cfc2ff}
+.laugh{font-family:'Nunito',sans-serif;font-weight:800;font-size:28px;fill:#d0486a;stroke:#fff;stroke-width:6;stroke-linejoin:round;paint-order:stroke}
 
 /* Portada */
 .cover-title{position:absolute;left:0;right:0;top:calc(7vh + env(safe-area-inset-top));text-align:center;padding:0 16px;color:#fff8e6;z-index:2}
@@ -101,8 +102,10 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
 @keyframes sweat{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(18px);opacity:0}}
 .pulse{animation:pulse 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.giggle{animation:giggle .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes giggle{from{transform:rotate(-4deg) translateY(0)}to{transform:rotate(4deg) translateY(-4px)}}
 @media (prefers-reduced-motion:reduce){
-  .bob,.bob2,.drift,.tw,.glow,.fall,.rain,.flicker,.spin,.float,.float2,.flut,.shimmer,.sweat,.pulse,.hint span{animation:none!important}
+  .bob,.bob2,.drift,.tw,.glow,.fall,.rain,.flicker,.spin,.float,.float2,.flut,.shimmer,.sweat,.pulse,.giggle,.hint span{animation:none!important}
 }
 </style>
 </head>
@@ -275,6 +278,8 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
   <g id="kface-nervous"><path d="M-31,-293 Q-20,-301 -8,-296 M8,-296 Q20,-301 31,-293" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".65"><circle cx="-33" cy="-254" r="10"/><circle cx="33" cy="-254" r="10"/></g><path d="M-12,-243 q3,-4 6,0 q3,4 6,0 q3,-4 6,0 q3,4 6,0" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
   <g id="kface-soft"><path d="M-31,-289 Q-20,-295 -8,-294 M8,-294 Q20,-295 31,-289" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".35"><circle cx="-33" cy="-254" r="9"/><circle cx="33" cy="-254" r="9"/></g><path d="M-9,-245 Q0,-239 9,-245" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
   <g id="kface-sad"><path d="M-31,-287 Q-20,-291 -8,-299 M8,-299 Q20,-291 31,-287" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M-11,-238 Q0,-247 11,-238" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <!-- avergonzado: ojos apretados > <, cara colorada y rayitas de rubor -->
+  <g id="kface-shy"><path d="M-31,-290 Q-20,-296 -8,-302 M8,-302 Q20,-296 31,-290" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f3cda8"><ellipse cx="-19" cy="-274" rx="9" ry="10.5"/><ellipse cx="19" cy="-274" rx="9" ry="10.5"/></g><path d="M-27,-282 L-13,-275 L-27,-268 M27,-282 L13,-275 L27,-268" stroke="#2a1f1c" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="0" cy="-256" rx="44" ry="12" fill="#ff6f7d" opacity=".28"/><g fill="#f06c7a" opacity=".8"><ellipse cx="-33" cy="-254" rx="12" ry="9"/><ellipse cx="33" cy="-254" rx="12" ry="9"/></g><path d="M-37,-259 l-4,8 M-31,-259 l-4,8 M-25,-259 l-4,8 M29,-259 l-4,8 M35,-259 l-4,8 M41,-259 l-4,8" stroke="#d63c50" stroke-width="2.2" stroke-linecap="round"/><path d="M-12,-242 Q-6,-238 0,-242 Q6,-246 12,-242" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
   <g id="kface-brave"><path d="M-31,-299 Q-20,-297 -8,-289 M8,-289 Q20,-297 31,-299" stroke="#1d1a22" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#f2939a" opacity=".3"><circle cx="-33" cy="-254" r="9"/><circle cx="33" cy="-254" r="9"/></g><path d="M-11,-244 Q0,-238 11,-244" stroke="#7a3b2e" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
 
   <!-- ======= LA PRINCESA: sonrisa hermosa, cabello castaño, ojos brillantes ======= -->
@@ -292,20 +297,24 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
     <circle cx="-32" cy="-148" r="15" fill="#f8cadb"/><circle cx="32" cy="-148" r="15" fill="#f8cadb"/>
     <rect x="-8" y="-162" width="16" height="14" fill="#efc3a2"/>
     <circle cx="0" cy="-200" r="48" fill="#f7d6ba"/>
-    <path d="M-50,-204 C-54,-248 -20,-256 0,-254 C26,-256 56,-244 50,-198 C46,-218 32,-232 20,-236 C10,-226 -14,-224 -28,-234 C-38,-228 -46,-218 -50,-204Z" fill="#6e4632"/>
-    <path d="M-50,-206 C-58,-172 -56,-150 -46,-134 C-44,-160 -42,-184 -38,-204Z M50,-206 C58,-172 56,-150 46,-134 C44,-160 42,-184 38,-204Z" fill="#6e4632"/>
-    <path d="M-30,-244 q14,-8 28,-6" stroke="#8f5f44" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>
+    <!-- cabello delantero de una sola pieza: enmarca la cara sin dejar picos en las sienes -->
+    <path d="M-46,-130 C-40,-158 -40,-190 -42,-208 C-36,-224 -14,-222 4,-230 C14,-234 20,-240 22,-242 C34,-236 42,-224 42,-208 C40,-190 40,-158 46,-130 C58,-150 60,-180 56,-206 C52,-244 24,-260 0,-260 C-24,-260 -52,-244 -56,-206 C-60,-180 -58,-150 -46,-130Z" fill="#6e4632"/>
+    <path d="M-45,-222 Q-38,-243 -18,-251" stroke="#8f5f44" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>
     <path d="M-22,-248 L-17,-264 L-9,-252 L0,-270 L9,-252 L17,-264 L22,-248Z" fill="#f2c14e" stroke="#d9a431" stroke-width="1.5" stroke-linejoin="round"/>
     <circle cx="0" cy="-258" r="3.5" fill="#6fc3df"/>
-    <ellipse cx="-17" cy="-196" rx="8" ry="10" fill="#3a2418"><animate attributeName="ry" values="10;10;1;10;10" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></ellipse>
-    <ellipse cx="17" cy="-196" rx="8" ry="10" fill="#3a2418"><animate attributeName="ry" values="10;10;1;10;10" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></ellipse>
-    <g fill="#fff"><circle cx="-14" cy="-200" r="3.2"/><circle cx="-20" cy="-191" r="1.6"/><circle cx="20" cy="-200" r="3.2"/><circle cx="14" cy="-191" r="1.6"/><animate attributeName="opacity" values="1;1;0;1;1" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></g>
-    <path d="M-25,-202 l-5,-4 M-25,-197 l-6,-1 M25,-202 l5,-4 M25,-197 l6,-1" stroke="#3a2418" stroke-width="2" stroke-linecap="round"/>
-    <path d="M-2,-181 q2,3 4,0" stroke="#d9a07e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="-17" cy="-194" rx="7.5" ry="9.5" fill="#3a2418"><animate attributeName="ry" values="9.5;9.5;1;9.5;9.5" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></ellipse>
+    <ellipse cx="17" cy="-194" rx="7.5" ry="9.5" fill="#3a2418"><animate attributeName="ry" values="9.5;9.5;1;9.5;9.5" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></ellipse>
+    <g fill="#fff"><circle cx="-14.5" cy="-198" r="3"/><circle cx="-19.5" cy="-189.5" r="1.5"/><circle cx="19.5" cy="-198" r="3"/><circle cx="14.5" cy="-189.5" r="1.5"/><animate attributeName="opacity" values="1;1;0;1;1" keyTimes="0;.88;.92;.96;1" dur="4.6s" repeatCount="indefinite"/></g>
+    <path d="M-24,-200 l-5,-4 M-24.5,-195 l-5.5,-1 M24,-200 l5,-4 M24.5,-195 l5.5,-1" stroke="#3a2418" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-2,-179 q2,2.5 4,0" stroke="#d9a07e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   </g>
-  <g id="pface-happy"><path d="M-25,-214 Q-17,-220 -9,-215 M9,-215 Q17,-220 25,-214" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".55"><circle cx="-29" cy="-180" r="9"/><circle cx="29" cy="-180" r="9"/></g><path d="M-15,-172 Q0,-148 15,-172Z" fill="#b0405a"/><path d="M-13,-171.5 L13,-171.5 Q12,-166 0,-165.5 Q-12,-166 -13,-171.5Z" fill="#fff"/></g>
-  <g id="pface-soft"><path d="M-25,-214 Q-17,-220 -9,-215 M9,-215 Q17,-220 25,-214" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".45"><circle cx="-29" cy="-180" r="9"/><circle cx="29" cy="-180" r="9"/></g><path d="M-11,-171 Q0,-161 11,-171" stroke="#b0405a" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
-  <g id="pface-sad"><path d="M-25,-211 Q-17,-213 -9,-220 M9,-220 Q17,-213 25,-211" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".3"><circle cx="-29" cy="-180" r="9"/><circle cx="29" cy="-180" r="9"/></g><path d="M-9,-162 Q0,-170 9,-162" stroke="#b0405a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M-25,-186 q-5,8 0,11 q5,-3 0,-11z" fill="#9fd8f7"><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/></path></g>
+  <clipPath id="pmouth-open"><path d="M-12,-172 Q0,-171 12,-172 Q10,-160 0,-159 Q-10,-160 -12,-172Z"/></clipPath>
+  <clipPath id="pmouth-laugh"><path d="M-14,-174 Q0,-173 14,-174 Q12,-158 0,-157 Q-12,-158 -14,-174Z"/></clipPath>
+  <g id="pface-happy"><path d="M-25,-212 Q-17,-218 -9,-213 M9,-213 Q17,-218 25,-212" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".55"><circle cx="-29" cy="-176" r="8.5"/><circle cx="29" cy="-176" r="8.5"/></g><path d="M-12,-172 Q0,-171 12,-172 Q10,-160 0,-159 Q-10,-160 -12,-172Z" fill="#b0405a"/><g clip-path="url(#pmouth-open)"><ellipse cx="0" cy="-159" rx="8" ry="4.5" fill="#f28ba3"/><path d="M-12,-173 H12 V-169.5 Q0,-168 -12,-169.5Z" fill="#fff"/></g></g>
+  <g id="pface-soft"><path d="M-25,-212 Q-17,-218 -9,-213 M9,-213 Q17,-218 25,-212" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".45"><circle cx="-29" cy="-176" r="8.5"/><circle cx="29" cy="-176" r="8.5"/></g><path d="M-10,-170 Q0,-161 10,-170" stroke="#b0405a" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+  <g id="pface-sad"><path d="M-25,-209 Q-17,-211 -9,-218 M9,-218 Q17,-211 25,-209" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".3"><circle cx="-29" cy="-176" r="8.5"/><circle cx="29" cy="-176" r="8.5"/></g><path d="M-8,-162 Q0,-169 8,-162" stroke="#b0405a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M-24,-184 q-5,8 0,11 q5,-3 0,-11z" fill="#9fd8f7"><animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/></path></g>
+  <!-- riéndose: ojitos cerrados y boca bien abierta -->
+  <g id="pface-laugh"><path d="M-25,-214 Q-17,-221 -9,-216 M9,-216 Q17,-221 25,-214" stroke="#5a3624" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f7d6ba"><ellipse cx="-17" cy="-194" rx="9" ry="11"/><ellipse cx="17" cy="-194" rx="9" ry="11"/></g><path d="M-24,-192 Q-17,-203 -10,-192 M10,-192 Q17,-203 24,-192" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/><g fill="#f59ab0" opacity=".7"><circle cx="-29" cy="-177" r="9"/><circle cx="29" cy="-177" r="9"/></g><path d="M-14,-174 Q0,-173 14,-174 Q12,-158 0,-157 Q-12,-158 -14,-174Z" fill="#b0405a"/><g clip-path="url(#pmouth-laugh)"><ellipse cx="0" cy="-157" rx="9.5" ry="5.5" fill="#f28ba3"/><path d="M-14,-175 H14 V-171 Q0,-169.5 -14,-171Z" fill="#fff"/></g></g>
 
   <!-- ======= LOS PROBLEMAS: lobos, bestia, sombra y dragón ======= -->
   <g id="wolf">
@@ -437,7 +446,7 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
 </section>
 
 <!-- ======================= II. LA EXCUSA ======================= -->
-<section class="scene" style="--h:250">
+<section class="scene" style="--h:300">
   <div class="stage">
     <svg class="art" viewBox="0 -140 1000 940" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
       <rect x="-3000" y="-3000" width="7000" height="3700" fill="url(#g-day)"/>
@@ -446,17 +455,27 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
       <g data-a="x 0 -20 0 1"><path d="M-3000,590 C0,570 220,520 420,545 C620,570 800,510 1000,530 C1300,560 3000,560 4000,580 V760 H-3000Z" fill="#b6e09d"/><use href="#castle" transform="translate(830 590) scale(.55)"/></g>
       <path d="M-3000,640 C100,630 300,625 500,635 C700,645 900,628 4000,640 V3000 H-3000Z" fill="#9dd184"/>
       <g data-a="x 0 -40 0 1"><use href="#bush" fill="#7fc47a" transform="translate(190 660) scale(1.3)"/><use href="#bush" fill="#86cf84" transform="translate(900 665) scale(1.2)"/></g>
-      <g transform="translate(610 650)"><g class="bob2"><use href="#princess-base"/><use href="#pface-happy"/></g></g>
+      <!-- la princesa se ríe (da saltitos) y luego saluda -->
+      <g transform="translate(610 650)"><g data-a="y 0 -10 .44 .47; y -10 0 .47 .5; y 0 -10 .5 .53; y -10 0 .53 .56" data-o="50% 100%"><g class="bob2">
+        <use href="#princess-base"/>
+        <use href="#pface-happy" data-a="o 1 0 .42 .46; o 0 1 .6 .64"/>
+        <use href="#pface-laugh" data-a="o 0 1 .42 .46; o 1 0 .6 .64"/>
+      </g></g></g>
+      <!-- el caballero suelta la pregunta y se muere de vergüenza -->
       <g transform="translate(420 650)"><g data-a="x -90 0 0 .25" data-o="50% 100%"><g class="bob">
         <use href="#knight-base"/>
-        <use href="#kface-nervous" data-a="o 1 0 .62 .7"/>
-        <use href="#kface-love" data-a="o 0 1 .62 .7"/>
-        <g data-a="o 0 1 .2 .3; o 1 0 .6 .68"><g class="sweat"><path d="M60,-320 q-6,10 0,14 q6,-4 0,-14z" fill="#9fd8f7"/></g></g>
+        <use href="#kface-nervous" data-a="o 1 0 .34 .4"/>
+        <use href="#kface-shy" data-a="o 0 1 .34 .4; o 1 0 .7 .76"/>
+        <use href="#kface-love" data-a="o 0 1 .7 .76"/>
+        <g data-a="o 0 1 .2 .3; o 1 0 .68 .74"><g class="sweat"><path d="M60,-320 q-6,10 0,14 q6,-4 0,-14z" fill="#9fd8f7"/></g></g>
       </g></g></g>
       <g data-a="o 0 1 .22 .32; y 10 0 .22 .32">
-        <g transform="translate(190 232)"><rect width="210" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M150,58 L205,90 L178,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="148" y="52" width="32" height="8" fill="#fff"/><text class="bt" x="105" y="39" text-anchor="middle">Ehh… hola… yo…</text></g>
+        <g transform="translate(190 232)"><rect width="210" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M150,58 L205,90 L178,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="148" y="52" width="32" height="8" fill="#fff"/><text class="bt" x="105" y="39" text-anchor="middle">¿Tú respiras aire?</text></g>
       </g>
-      <g data-a="o 0 1 .5 .6; y 10 0 .5 .6">
+      <g data-a="o 0 1 .44 .5; s .6 1 .44 .5; o 1 0 .58 .62">
+        <g transform="rotate(-8 725 345)"><text class="laugh giggle" x="725" y="355" text-anchor="middle">¡Jajaja!</text></g>
+      </g>
+      <g data-a="o 0 1 .6 .68; y 10 0 .6 .68">
         <g transform="translate(650 300)"><rect width="150" height="62" rx="26" fill="#fff" stroke="#ead9b5" stroke-width="3"/><path d="M26,58 L14,96 L52,58" fill="#fff" stroke="#ead9b5" stroke-width="3" stroke-linejoin="round"/><rect x="24" y="52" width="30" height="8" fill="#fff"/><text class="bt" x="66" y="39" text-anchor="middle">¡Hola!</text><use href="#heart" fill="#ef6f8e" transform="translate(120 32) scale(.7)"/></g>
       </g>
       <use href="#flower" fill="#f39ab6" transform="translate(240 735)"/><use href="#flower" fill="#fff" transform="translate(320 720) scale(.9)"/><use href="#flower" fill="#c7a3f0" transform="translate(520 745)"/><use href="#flower" fill="#ff9e80" transform="translate(700 725)"/><use href="#flower" fill="#f39ab6" transform="translate(780 745) scale(.9)"/>
@@ -464,7 +483,7 @@ svg [data-a]{transform-box:fill-box;transform-origin:50% 50%}
     <div class="card" data-a="o 0 1 0 .08">
       <div class="chap">Capítulo II · La excusa más tonta</div>
       <p data-a="o 0 1 .05 .18; y 12 0 .05 .18">Buscó la excusa más tonta del reino para hablarle.</p>
-      <p data-a="o 0 1 .55 .68; y 12 0 .55 .68">Quizás no fue la mejor excusa… pero al menos logró hablarle.</p>
+      <p data-a="o 0 1 .66 .76; y 12 0 .66 .76">Quizás no fue la mejor excusa… pero al menos logró hablarle.</p>
     </div>
   </div>
 </section>
